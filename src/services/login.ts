@@ -7,6 +7,22 @@ export interface LoginParamsType {
   captcha: string;
 }
 
+export interface AccountLogin {
+  username: string;
+  password: string;
+}
+
+export async function accountLogin(params: AccountLogin) {
+  return request('/api/user/token', {
+    method: 'POST',
+    data: params,
+  });
+}
+
+export async function accountInfo() {
+  return request('/api/user/info');
+}
+
 export async function fakeAccountLogin(params: LoginParamsType) {
   return request('/api/login/account', {
     method: 'POST',

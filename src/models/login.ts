@@ -1,9 +1,15 @@
 import { stringify } from 'querystring';
 import { history, Reducer, Effect } from 'umi';
 
-import { fakeAccountLogin } from '@/services/login';
+import { accountLogin, accountInfo } from '@/services/login';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
+import { setToken } from '@/utils/cookie';
+
+export interface JwtToken {
+  status?: 'ok' | 'error';
+  token?: string;
+}
 
 export interface StateType {
   status?: 'ok' | 'error';
@@ -20,6 +26,7 @@ export interface LoginModelType {
   };
   reducers: {
     changeLoginStatus: Reducer<StateType>;
+    saveLoginToken: Reducer<JwtToken>;
   };
 }
 
@@ -32,30 +39,42 @@ const Model: LoginModelType = {
 
   effects: {
     *login({ payload }, { call, put }) {
-      const response = yield call(fakeAccountLogin, payload);
+      const tokenResponse = yield call(accountLogin, payload);
+      if (!tokenResponse.success) {
+        return;
+      }
+      yield put({
+        type: 'saveLoginToken',
+        payload: tokenResponse,
+      });
+
+      const userInfo = yield call(accountInfo, payload);
+      if (!tokenResponse.success) {
+        return;
+      }
       yield put({
         type: 'changeLoginStatus',
-        payload: response,
+        payload: userInfo,
       });
+
       // Login successfully
-      if (response.status === 'ok') {
-        const urlParams = new URL(window.location.href);
-        const params = getPageQuery();
-        let { redirect } = params as { redirect: string };
-        if (redirect) {
-          const redirectUrlParams = new URL(redirect);
-          if (redirectUrlParams.origin === urlParams.origin) {
-            redirect = redirect.substr(urlParams.origin.length);
-            if (redirect.match(/^\/.*#/)) {
-              redirect = redirect.substr(redirect.indexOf('#') + 1);
-            }
-          } else {
-            window.location.href = '/';
-            return;
+      // if (userInfo.status === 'ok') {
+      const urlParams = new URL(window.location.href);
+      const params = getPageQuery();
+      let { redirect } = params as { redirect: string };
+      if (redirect) {
+        const redirectUrlParams = new URL(redirect);
+        if (redirectUrlParams.origin === urlParams.origin) {
+          redirect = redirect.substr(urlParams.origin.length);
+          if (redirect.match(/^\/.*#/)) {
+            redirect = redirect.substr(redirect.indexOf('#') + 1);
           }
+        } else {
+          window.location.href = '/';
+          return;
         }
-        history.replace(redirect || '/');
       }
+      history.replace(redirect || '/');
     },
 
     logout() {
@@ -74,11 +93,18 @@ const Model: LoginModelType = {
 
   reducers: {
     changeLoginStatus(state, { payload }) {
-      setAuthority(payload.currentAuthority);
+      setAuthority(payload.content.codes);
       return {
         ...state,
         status: payload.status,
         type: payload.type,
+      };
+    },
+    saveLoginToken(state, { payload }) {
+      setToken(payload.content.token);
+      return {
+        ...state,
+        status: payload.content,
       };
     },
   },

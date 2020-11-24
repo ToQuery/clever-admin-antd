@@ -4,6 +4,7 @@
  */
 import { extend } from 'umi-request';
 import { notification } from 'antd';
+import { getTokenWithBear } from './cookie';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -51,6 +52,20 @@ const errorHandler = (error: { response: Response }): Response => {
 const request = extend({
   errorHandler, // 默认错误处理
   credentials: 'include', // 默认请求是否带上cookie
+});
+
+request.interceptors.request.use((url, options) => {
+  const jwtHeader = new Headers();
+  jwtHeader.append('Authorization', getTokenWithBear());
+  const optionsObj = {
+    options: {
+      ...options,
+      prefix: '/api',
+      headers: jwtHeader,
+      interceptors: true,
+    },
+  };
+  return optionsObj;
 });
 
 export default request;
