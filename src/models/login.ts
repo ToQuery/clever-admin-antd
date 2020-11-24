@@ -4,6 +4,7 @@ import { history, Reducer, Effect } from 'umi';
 import { accountLogin, accountInfo } from '@/services/login';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
+import { message } from 'antd';
 import { setToken } from '@/utils/cookie';
 
 export interface JwtToken {
@@ -58,23 +59,25 @@ const Model: LoginModelType = {
       });
 
       // Login successfully
-      // if (userInfo.status === 'ok') {
-      const urlParams = new URL(window.location.href);
-      const params = getPageQuery();
-      let { redirect } = params as { redirect: string };
-      if (redirect) {
-        const redirectUrlParams = new URL(redirect);
-        if (redirectUrlParams.origin === urlParams.origin) {
-          redirect = redirect.substr(urlParams.origin.length);
-          if (redirect.match(/^\/.*#/)) {
-            redirect = redirect.substr(redirect.indexOf('#') + 1);
+      if (response.status === 'ok') {
+        const urlParams = new URL(window.location.href);
+        const params = getPageQuery();
+        message.success('🎉 🎉 🎉  登录成功！');
+        let { redirect } = params as { redirect: string };
+        if (redirect) {
+          const redirectUrlParams = new URL(redirect);
+          if (redirectUrlParams.origin === urlParams.origin) {
+            redirect = redirect.substr(urlParams.origin.length);
+            if (redirect.match(/^\/.*#/)) {
+              redirect = redirect.substr(redirect.indexOf('#') + 1);
+            }
+          } else {
+            window.location.href = '/';
+            return;
           }
-        } else {
-          window.location.href = '/';
-          return;
         }
+        history.replace(redirect || '/');
       }
-      history.replace(redirect || '/');
     },
 
     logout() {

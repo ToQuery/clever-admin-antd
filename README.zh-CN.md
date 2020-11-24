@@ -12,8 +12,6 @@
 
 </div>
 
-<<<<<<< HEAD
-
 - 预览：http://preview.pro.ant.design
 - 首页：http://pro.ant.design/index-cn
 - 使用文档：http://pro.ant.design/docs/getting-started-cn
@@ -21,24 +19,9 @@
 - 常见问题：http://pro.ant.design/docs/faq-cn
 - 国内镜像：http://ant-design-pro.gitee.io
 
-## 现在我们发布了 4.0! 🎉🎉🎉
+## 5.0 已经可以试用了 ! 🎉🎉🎉
 
-=======
-
-- Preview: http://preview.pro.ant.design
-- Home Page: http://pro.ant.design
-- Documentation: http://pro.ant.design/docs/getting-started
-- ChangeLog: http://pro.ant.design/docs/changelog
-- FAQ: http://pro.ant.design/docs/faq
-- Mirror Site in China: http://ant-design-pro.gitee.io
-
-## 5.0 is ready for trial! 🎉🎉🎉
-
-[Try Ant Design Pro 5.0.0](https://beta-pro.ant.design/docs/upgrade-v5-cn)
-
-> > > > > > > master
-
-[Announcing Ant Design Pro 4.0.0](https://zhuanlan.zhihu.com/p/67498559)
+[尝试 Ant Design Pro 5.0.0](https://beta-pro.ant.design/docs/upgrade-v5-cn)
 
 ## 特性
 
