@@ -1,5 +1,6 @@
 import { stringify } from 'querystring';
-import { history, Reducer, Effect } from 'umi';
+import type { Reducer, Effect } from 'umi';
+import { history } from 'umi';
 
 import { accountLogin, accountInfo } from '@/services/login';
 import { setAuthority } from '@/utils/authority';
@@ -12,13 +13,13 @@ export interface JwtToken {
   token?: string;
 }
 
-export interface StateType {
+export type StateType = {
   status?: 'ok' | 'error';
   type?: string;
   currentAuthority?: 'user' | 'guest' | 'admin';
-}
+};
 
-export interface LoginModelType {
+export type LoginModelType = {
   namespace: string;
   state: StateType;
   effects: {
@@ -29,7 +30,7 @@ export interface LoginModelType {
     changeLoginStatus: Reducer<StateType>;
     saveLoginToken: Reducer<JwtToken>;
   };
-}
+};
 
 const Model: LoginModelType = {
   namespace: 'login',
