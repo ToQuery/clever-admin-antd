@@ -2,7 +2,7 @@ import { stringify } from 'querystring';
 import type { Reducer, Effect } from 'umi';
 import { history } from 'umi';
 
-import { accountLogin, accountInfo } from '@/services/login';
+import { login as loginApi, userInfo as userInfoApi } from '@/services/clever-framework/api';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 import { message } from 'antd';
@@ -41,7 +41,7 @@ const Model: LoginModelType = {
 
   effects: {
     *login({ payload }, { call, put }) {
-      const tokenResponse = yield call(accountLogin, payload);
+      const tokenResponse = yield call(loginApi, payload);
       if (!tokenResponse.success) {
         return;
       }
@@ -50,7 +50,7 @@ const Model: LoginModelType = {
         payload: tokenResponse,
       });
 
-      const userInfo = yield call(accountInfo, payload);
+      const userInfo = yield call(userInfoApi, payload);
       if (!tokenResponse.success) {
         return;
       }
@@ -60,7 +60,7 @@ const Model: LoginModelType = {
       });
 
       // Login successfully
-      if (response.status === 'ok') {
+      if (tokenResponse.status === 'ok') {
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         message.success('🎉 🎉 🎉  登录成功！');

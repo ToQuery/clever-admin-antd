@@ -1,6 +1,6 @@
 import type { Effect, Reducer } from 'umi';
 
-import { queryCurrent, query as queryUsers } from '@/services/user';
+import { login as loginApi, userInfo as userInfoApi } from '@/services/clever-framework/api';
 
 export type CurrentUser = {
   avatar?: string;
@@ -42,14 +42,14 @@ const UserModel: UserModelType = {
 
   effects: {
     *fetch(_, { call, put }) {
-      const response = yield call(queryUsers);
+      const response = yield call(loginApi);
       yield put({
         type: 'save',
         payload: response,
       });
     },
     *fetchCurrent(_, { call, put }) {
-      const response = yield call(queryCurrent);
+      const response = yield call(userInfoApi);
       yield put({
         type: 'saveCurrentUser',
         payload: response,
