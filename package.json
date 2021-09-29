@@ -54,13 +54,13 @@
     "not ie <= 10"
   ],
   "dependencies": {
-    "@ant-design/icons": "^4.5.0",
-    "@ant-design/pro-descriptions": "^1.6.8",
-    "@ant-design/pro-form": "^1.18.3",
-    "@ant-design/pro-layout": "^6.15.3",
+    "@ant-design/icons": "^4.7.0",
+    "@ant-design/pro-descriptions": "^1.9.19",
+    "@ant-design/pro-form": "^1.42.1",
+    "@ant-design/pro-layout": "^6.26.0",
     "@ant-design/pro-table": "^2.30.8",
     "@umijs/route-utils": "^1.0.36",
-    "antd": "^4.14.0",
+    "antd": "^4.17.0-alpha.4",
     "classnames": "^2.2.6",
     "lodash": "^4.17.11",
     "moment": "^2.25.3",

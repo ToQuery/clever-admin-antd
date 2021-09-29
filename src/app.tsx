@@ -14,7 +14,7 @@ const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
 
 export const request: RequestConfig = {
-  timeout: 1000,
+  timeout: 6000,
   requestInterceptors: [requestInterceptors],
 };
 
@@ -61,7 +61,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
     rightContentRender: () => <RightContent />,
     disableContentMargin: false,
     waterMarkProps: {
-      content: initialState?.userInfo?.name,
+      content: initialState?.userInfo?.nickname,
     },
     footerRender: () => <Footer />,
     onPageChange: () => {

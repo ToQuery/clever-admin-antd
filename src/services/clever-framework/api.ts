@@ -33,3 +33,127 @@ export async function login(loginRequest: CleverFramework.LoginRequest) {
     data: loginRequest,
   });
 }
+
+//
+export async function systemUser(params?: AppBase.PageParams & CleverFramework.UserListItem) {
+  return request<AppBase.ResponseParam<CleverFramework.UserListItem[]>>('/api/sys/user', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+  });
+}
+
+
+export async function systemUserAdd(systemUserBody: CleverFramework.UserListItem) {
+  return request<AppBase.ResponseParam<CleverFramework.UserListItem>>('/api/sys/user', {
+    method: 'POST',
+    data: systemUserBody,
+  });
+}
+
+//
+export async function systemUserUpdate(systemUserBody: CleverFramework.UserListItem) {
+  return request<AppBase.ResponseParam<CleverFramework.UserListItem>>('/api/sys/user', {
+    method: 'PUT',
+    data: systemUserBody,
+  });
+}
+
+//
+export async function systemUserDelete(ids: string[]) {
+  return request('/api/sys/user', {
+    method: 'DELETE',
+    params: {
+      ...ids,
+    },
+  });
+}
+
+//
+export async function systemMenu(params?: CleverFramework.MenuListItem) {
+  return request<AppBase.ResponseParam<CleverFramework.MenuListItem[]>>('/api/sys/menu/tree', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+  });
+}
+
+
+export async function systemMenuAdd(systemMenuBody: CleverFramework.MenuListItem) {
+  return request<AppBase.ResponseParam<CleverFramework.MenuListItem>>('/api/sys/menu', {
+    method: 'POST',
+    data: systemMenuBody,
+  });
+}
+
+export async function systemMenuDetail(id: string) {
+  return request<AppBase.ResponseParam<CleverFramework.MenuListItem>>('/api/sys/menu/' + id, {
+    method: 'GET',
+  });
+}
+
+//
+export async function systemMenuUpdate(systemMenuBody: CleverFramework.MenuListItem) {
+  return request<AppBase.ResponseParam<CleverFramework.MenuListItem>>('/api/sys/menu', {
+    method: 'PUT',
+    data: systemMenuBody,
+  });
+}
+
+//
+export async function systemMenuDelete(ids: string[]) {
+  return request('/api/sys/menu', {
+    method: 'DELETE',
+    params: {
+      ids: ids,
+    },
+  });
+}
+
+//
+export async function systemRole(params?: AppBase.PageParams & CleverFramework.RoleListItem) {
+  return request<AppBase.ResponseParam<CleverFramework.RoleListItem[]>>('/api/sys/role', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+  });
+}
+
+
+export async function systemRoleAdd(systemRoleBody: CleverFramework.RoleListItem) {
+  return request<AppBase.ResponseParam<CleverFramework.RoleListItem>>('/api/sys/role', {
+    method: 'POST',
+    data: systemRoleBody,
+  });
+}
+
+export async function systemRoleUpdate(systemRoleBody: CleverFramework.RoleListItem) {
+  return request<AppBase.ResponseParam<CleverFramework.RoleListItem>>('/api/sys/role', {
+    method: 'PUT',
+    data: systemRoleBody,
+  });
+}
+
+export async function systemRoleDelete(ids: string[]) {
+  return request('/api/sys/role', {
+    method: 'DELETE',
+    params: {
+      ...ids,
+    },
+  });
+}
+
+//
+export async function systemLog(params?: AppBase.PageParams & CleverFramework.LogListItem) {
+  return request<AppBase.ResponseParam<CleverFramework.LogListItem[]>>('/api/sys/log', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+  });
+}
+
+

@@ -1,0 +1,181 @@
+import { PlusOutlined } from '@ant-design/icons';
+import { Button, message, } from 'antd';
+import React, {useState, useRef, createRef} from 'react';
+import { useIntl, FormattedMessage } from 'umi';
+import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
+import type { ProColumns, ActionType } from '@ant-design/pro-table';
+import ProTable from '@ant-design/pro-table';
+import { systemRole, systemRoleDelete } from '@/services/clever-framework/api';
+import type {CleverFramework} from "@/services/clever-framework/typings";
+import RoleCreateForm from "./RoleCreateForm";
+
+
+
+/**
+ *  Delete node
+ * @zh-CN 删除节点
+ *
+ * @param selectedRows
+ */
+const handleRemove = async (selectedRows: CleverFramework.RoleListItem[]) => {
+  const hide = message.loading('正在删除');
+  if (!selectedRows) return true;
+  try {
+    await systemRoleDelete({
+      ids: selectedRows.map((row) => row.id),
+    });
+    hide();
+    message.success('Deleted successfully and will refresh soon');
+    return true;
+  } catch (error) {
+    hide();
+    message.error('Delete failed, please try again');
+    return false;
+  }
+};
+
+const RoleList: React.FC = () => {
+
+  const actionRef = useRef<ActionType>();
+  const [currentRow, setCurrentRow] = useState<CleverFramework.RoleListItem>();
+  const [selectedRowsState, setSelectedRows] = useState<CleverFramework.RoleListItem[]>([]);
+
+  const createFormRef = createRef<RoleCreateForm>(); // 初始化ref
+
+  // const updateFormRef = createRef<RoleCreateForm>(); // 初始化ref
+
+
+  const onFinish = () => {
+    setSelectedRows([]);
+    actionRef.current?.reloadAndRest?.();
+  };
+
+  const onCancel = () => {
+
+  }
+
+  /**
+   * @en-US International configuration
+   * @zh-CN 国际化配置
+   * */
+  const intl = useIntl();
+
+  const columns: ProColumns<CleverFramework.RoleListItem>[] = [
+    {
+      title: (
+        <FormattedMessage
+          id="pages.system.roleTable.id"
+          defaultMessage="Id"
+        />
+      ),
+      hideInSearch: true,
+      width: 300,
+      dataIndex: 'id',
+      valueType: 'textarea',
+    },
+    {
+      title: <FormattedMessage id="pages.system.roleTable.roleName" defaultMessage="角色名称" />,
+      dataIndex: 'roleName',
+      valueType: 'textarea',
+    },
+    {
+      title: <FormattedMessage id="pages.commonTable.createDateTime" defaultMessage="创建时间" />,
+      dataIndex: 'createDateTime',
+      valueType: 'textarea',
+    },
+    {
+      title: <FormattedMessage id="pages.searchTable.titleOption" defaultMessage="操作" />,
+      dataIndex: 'option',
+      valueType: 'option',
+      width: 500,
+      render: (_, record) => [
+        <a
+          key="update"
+          onClick={() => {
+            setCurrentRow(record);
+          }}
+        >
+          <FormattedMessage id="pages.commonTable.update" defaultMessage="修改" />
+        </a>,
+        <a key="delete">
+          <FormattedMessage id="pages.commonTable.delete" defaultMessage="删除" />
+        </a>,
+      ],
+    },
+  ];
+
+  return (
+    <PageContainer>
+      <ProTable<CleverFramework.RoleListItem, API.PageParams>
+        headerTitle={intl.formatMessage({
+          id: 'pages.searchTable.title',
+          defaultMessage: 'Enquiry form',
+        })}
+        actionRef={actionRef}
+        rowKey="id"
+        search={{
+          labelWidth: 120,
+        }}
+        toolBarRender={() => [
+          <Button
+            type="primary"
+            key="primary"
+            onClick={() => {
+              // handleModalVisible(true);
+              createFormRef.current?.onShow('0');
+            }}
+          >
+            <PlusOutlined /> <FormattedMessage id="pages.searchTable.new" defaultMessage="New" />
+          </Button>,
+        ]}
+        request={async (
+          // 第一个参数 params 查询表单和 params 参数的结合
+          // 第一个参数中一定会有 pageSize 和  current ，这两个参数是 antd 的规范
+          params, sort, filter,
+        ) => {
+          // 这里需要返回一个 Promise,在返回之前你可以进行数据转化
+          // 如果需要转化参数可以在这里进行修改
+          const responseParam = await systemRole(params);
+          return {
+            data: responseParam.content,
+            success: responseParam.success,
+            total: responseParam.page.totalElements,
+          };
+        }}
+        columns={columns}
+        rowSelection={{
+          onChange: (_, selectedRows) => {
+            setSelectedRows(selectedRows);
+          },
+        }}
+      />
+      {selectedRowsState?.length > 0 && (
+        <FooterToolbar
+          extra={
+            <div>
+              <FormattedMessage id="pages.searchTable.chosen" defaultMessage="Chosen" />{' '}
+              <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
+              <FormattedMessage id="pages.searchTable.item" defaultMessage="项" />
+            </div>
+          }
+        >
+          <Button
+            onClick={async () => {
+              await handleRemove(selectedRowsState);
+              setSelectedRows([]);
+              actionRef.current?.reloadAndRest?.();
+            }}
+          >
+            <FormattedMessage
+              id="pages.searchTable.batchDeletion"
+              defaultMessage="Batch deletion"
+            />
+          </Button>
+        </FooterToolbar>
+      )}
+      <RoleCreateForm ref={createFormRef} onFinish={ () => onFinish() } onCancel={ () => onCancel() }/>
+    </PageContainer>
+  );
+};
+
+export default RoleList;

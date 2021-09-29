@@ -27,45 +27,53 @@ declare namespace CleverFramework {
     avatar?: string;
     nickname?: string;
     email?: string;
-    codes?: any;
+    codes?: string[];
     authorities?: {
       menuName?: string;
       menuCode?: string;
     };
   };
 
-  type RuleListItem = {
-    key?: number;
-    disabled?: boolean;
-    href?: string;
+  type UserListItem = {
+    id?: string;
+    username?: string;
+    nickname?: string;
     avatar?: string;
-    name?: string;
-    owner?: string;
-    desc?: string;
-    callNo?: number;
-    status?: number;
-    updatedAt?: string;
-    createdAt?: string;
-    progress?: number;
+    phone?: string;
+    email?: string;
+    enabled?: boolean;
+    changePasswordDateTime?: string;
   };
 
-  type RuleList = {
-    data?: RuleListItem[];
-    /** 列表的内容总数 */
-    total?: number;
-    success?: boolean;
+  type MenuListItem = {
+    id?: string;
+    menuName?: string;
+    menuCode?: string;
+    menuLevel?: number;
+    sortNum?: number;
+    parentId?: string;
+    children?: MenuListItem[];
   };
 
-  type FakeCaptcha = {
-    code?: number;
-    status?: string;
+  type RoleListItem = {
+    id?: string;
+    roleName?: string;
   };
 
-  type NoticeIconList = {
-    data?: NoticeIconItem[];
-    /** 列表的内容总数 */
-    total?: number;
-    success?: boolean;
+  type LogType = 'CREATE' | 'MODIFY' | 'DELETE'| 'QUERY';
+
+
+
+  type LogListItem = {
+    id?: string;
+    userId?: string;
+    moduleName?: string;
+    bizName?: string;
+    logType?: LogType;
+    rawData?: string;
+    targetData?: string;
+    sysUser?: UserListItem;
+    createDateTime?: string;
   };
 
   type NoticeIconItemType = 'notification' | 'message' | 'event';

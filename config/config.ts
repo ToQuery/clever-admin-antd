@@ -69,4 +69,9 @@ export default defineConfig({
   mfsu: {},
   webpack5: {},
   exportStatic: {},
+  lessLoader: { // https://githubmemory.com/repo/ant-design/ant-design-pro/issues/9082
+    modifyVars: {
+      'root-entry-name': 'default'
+    }
+  }
 });
