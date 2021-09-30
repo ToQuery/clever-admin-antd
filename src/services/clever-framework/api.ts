@@ -18,7 +18,7 @@ export async function userInfo() {
 
 // 退出登录
 export async function logout() {
-  return request<Record<string, any>>('/api/login/outLogin', {
+  return request<Record<string, any>>('/api/user/logout', {
     method: 'POST',
   });
 }
@@ -43,7 +43,6 @@ export async function systemUser(params?: AppBase.PageParams & CleverFramework.U
     },
   });
 }
-
 
 export async function systemUserAdd(systemUserBody: CleverFramework.UserListItem) {
   return request<AppBase.ResponseParam<CleverFramework.UserListItem>>('/api/sys/user', {
@@ -79,7 +78,6 @@ export async function systemMenu(params?: CleverFramework.MenuListItem) {
     },
   });
 }
-
 
 export async function systemMenuAdd(systemMenuBody: CleverFramework.MenuListItem) {
   return request<AppBase.ResponseParam<CleverFramework.MenuListItem>>('/api/sys/menu', {
@@ -122,7 +120,6 @@ export async function systemRole(params?: AppBase.PageParams & CleverFramework.R
   });
 }
 
-
 export async function systemRoleAdd(systemRoleBody: CleverFramework.RoleListItem) {
   return request<AppBase.ResponseParam<CleverFramework.RoleListItem>>('/api/sys/role', {
     method: 'POST',
@@ -155,5 +152,3 @@ export async function systemLog(params?: AppBase.PageParams & CleverFramework.Lo
     },
   });
 }
-
-
