@@ -79,10 +79,13 @@ export default {
 
   'pages.system.userTable.id': '用户id',
   'pages.system.userTable.username': '用户名',
-  'pages.system.userTable.enabled': '启用状态',
-  'pages.system.userTable.enabled.true': '已启用',
-  'pages.system.userTable.enabled.false': '已禁用',
+  'pages.system.userTable.userStatus': '用户状态',
+  'pages.system.userTable.userStatus.enable': '已启用',
+  'pages.system.userTable.userStatus.disable': '已禁用',
   'pages.system.userTable.changePasswordDateTime': '修改密码时间',
+  'pages.system.userTable.nickname': '昵称',
+  'pages.system.userTable.phone': '手机号',
+  'pages.system.userTable.email': '邮箱',
 
   'pages.system.menuTable.id': '菜单id',
   'pages.system.menuTable.menuName': '菜单名称',

@@ -8,7 +8,7 @@ declare namespace AppBase {
     success: boolean;
     code: number;
     message?: string;
-    content?: T;
+    content: T;
     page: PageParams;
   };
 
@@ -19,34 +19,4 @@ declare namespace AppBase {
     totalPages: number; //    页面数量
   };
 
-  type ErrorResponse = {
-    /** 业务约定的错误码 */
-    errorCode: string;
-    /** 业务上的错误信息 */
-    errorMessage?: string;
-    /** 业务上的请求是否成功 */
-    success?: boolean;
-  };
-
-  type NoticeIconList = {
-    data?: NoticeIconItem[];
-    /** 列表的内容总数 */
-    total?: number;
-    success?: boolean;
-  };
-
-  type NoticeIconItemType = 'notification' | 'message' | 'event';
-
-  type NoticeIconItem = {
-    id?: string;
-    extra?: string;
-    key?: string;
-    read?: boolean;
-    avatar?: string;
-    title?: string;
-    status?: string;
-    datetime?: string;
-    description?: string;
-    type?: NoticeIconItemType;
-  };
 }

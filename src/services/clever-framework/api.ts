@@ -51,6 +51,12 @@ export async function systemUserAdd(systemUserBody: CleverFramework.UserListItem
   });
 }
 
+export async function systemUserDetail(id: string) {
+  return request<AppBase.ResponseParam<CleverFramework.UserListItem>>('/api/sys/user/' + id, {
+    method: 'GET',
+  });
+}
+
 //
 export async function systemUserUpdate(systemUserBody: CleverFramework.UserListItem) {
   return request<AppBase.ResponseParam<CleverFramework.UserListItem>>('/api/sys/user', {
@@ -60,11 +66,11 @@ export async function systemUserUpdate(systemUserBody: CleverFramework.UserListI
 }
 
 //
-export async function systemUserDelete(ids: string[]) {
+export async function systemUserDelete(ids: (string | undefined)[]) {
   return request('/api/sys/user', {
     method: 'DELETE',
     params: {
-      ...ids,
+      ids: ids,
     },
   });
 }
@@ -101,7 +107,7 @@ export async function systemMenuUpdate(systemMenuBody: CleverFramework.MenuListI
 }
 
 //
-export async function systemMenuDelete(ids: string[]) {
+export async function systemMenuDelete(ids: (string | undefined)[]) {
   return request('/api/sys/menu', {
     method: 'DELETE',
     params: {
@@ -120,6 +126,12 @@ export async function systemRole(params?: AppBase.PageParams & CleverFramework.R
   });
 }
 
+export async function systemRoleList() {
+  return request<AppBase.ResponseParam<CleverFramework.RoleListItem[]>>('/api/sys/role/list', {
+    method: 'GET',
+  });
+}
+
 export async function systemRoleAdd(systemRoleBody: CleverFramework.RoleListItem) {
   return request<AppBase.ResponseParam<CleverFramework.RoleListItem>>('/api/sys/role', {
     method: 'POST',
@@ -134,11 +146,11 @@ export async function systemRoleUpdate(systemRoleBody: CleverFramework.RoleListI
   });
 }
 
-export async function systemRoleDelete(ids: string[]) {
+export async function systemRoleDelete(ids: (string | undefined)[]) {
   return request('/api/sys/role', {
     method: 'DELETE',
     params: {
-      ...ids,
+      ids: ids,
     },
   });
 }

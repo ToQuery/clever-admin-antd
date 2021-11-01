@@ -8,13 +8,13 @@ import Footer from '@/components/Footer';
 import { userInfo } from './services/clever-framework/api';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
 import type { CleverFramework } from '@/services/clever-framework/typings';
-import { requestInterceptors } from '@/request';
+import { requestInterceptors } from '@/utils/request';
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
 
 export const request: RequestConfig = {
-  timeout: 6000,
+  timeout: 10000,
   requestInterceptors: [requestInterceptors],
 };
 

@@ -2,6 +2,7 @@
 /* eslint-disable */
 
 import { Protocol } from 'puppeteer-core';
+import {DataNode} from "rc-tree/lib/interface";
 
 declare namespace CleverFramework {
   type LoginRequest = {
@@ -20,7 +21,6 @@ declare namespace CleverFramework {
     captchaImage?: string;
   };
 
-  import integer = Protocol.integer;
   type UserInfo = {
     id?: string;
     username?: string;
@@ -62,8 +62,6 @@ declare namespace CleverFramework {
 
   type LogType = 'CREATE' | 'MODIFY' | 'DELETE'| 'QUERY';
 
-
-
   type LogListItem = {
     id?: string;
     userId?: string;
@@ -76,18 +74,4 @@ declare namespace CleverFramework {
     createDateTime?: string;
   };
 
-  type NoticeIconItemType = 'notification' | 'message' | 'event';
-
-  type NoticeIconItem = {
-    id?: string;
-    extra?: string;
-    key?: string;
-    read?: boolean;
-    avatar?: string;
-    title?: string;
-    status?: string;
-    datetime?: string;
-    description?: string;
-    type?: NoticeIconItemType;
-  };
 }

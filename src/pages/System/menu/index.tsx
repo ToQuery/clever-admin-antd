@@ -1,42 +1,16 @@
 import { PlusOutlined } from '@ant-design/icons';
-import {Form, Button, message, TreeSelect, Popconfirm} from 'antd';
+import { Button, message, Popconfirm} from 'antd';
 import React, {useState, useRef, createRef} from 'react';
 import { useIntl, FormattedMessage } from 'umi';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import type { FormValueType } from './UpdateForm';
-import MenuUpdateForm from './MenuUpdateForm';
 import MenuCreateForm from './MenuCreateForm';
-import { systemMenu, systemMenuUpdate, systemMenuDelete } from '@/services/clever-framework/api';
+import MenuUpdateForm from './MenuUpdateForm';
+import { systemMenu, systemMenuDelete } from '@/services/clever-framework/api';
 import type {CleverFramework} from "@/services/clever-framework/typings";
-import {ProFormInstance} from "@ant-design/pro-form";
-import {AppBase} from "@/services/typings";
+import type {AppBase} from "@/services/typings";
 
-
-/**
- * @en-US Update node
- * @zh-CN 更新节点
- *
- * @param fields
- */
-const handleUpdate = async (fields: FormValueType) => {
-  const hide = message.loading('Configuring');
-  try {
-    await systemMenuUpdate({
-      username: fields.username,
-      id: fields.id,
-    });
-    hide();
-
-    message.success('Configuration is successful');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('Configuration failed, please try again!');
-    return false;
-  }
-};
 
 /**
  *  Delete node
@@ -45,30 +19,38 @@ const handleUpdate = async (fields: FormValueType) => {
  * @param selectedRows
  */
 const handleRemove = async (selectedRows: CleverFramework.MenuListItem[]) => {
-  const hide = message.loading('正在删除');
+  const loadingMessage = message.loading('正在删除');
   if (!selectedRows) return true;
+  let success: boolean = false;
   try {
     await systemMenuDelete(selectedRows.map((row) => row.id));
-    hide();
-    message.success('Deleted successfully and will refresh soon');
-    return true;
+    message.success('删除成功，请稍等!');
+    success = true;
   } catch (error) {
-    hide();
-    message.error('Delete failed, please try again');
-    return false;
+    message.error('删除失败，请重试');
+  } finally {
+    loadingMessage();
   }
+  return success;
 };
 
 const MenuList: React.FC = () => {
 
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<CleverFramework.MenuListItem>();
+
   const [selectedRowsState, setSelectedRows] = useState<CleverFramework.MenuListItem[]>([]);
 
-  const createFormRef = createRef<CreateForm>(); // 初始化ref
+  const createFormRef = createRef<HTMLFormElement>(); // 初始化ref
+  const updateFormRef = createRef<HTMLFormElement>(); // 初始化ref
 
-  const updateFormRef = createRef<UpdateForm>(); // 初始化ref
-  // const updateFormRef = useRef<UpdateForm>();
+  const onFinish = () => {
+    setSelectedRows([]);
+    actionRef.current?.reloadAndRest?.();
+  };
+
+  const onCancel = () => {
+
+  }
 
   /**
    * @en-US International configuration
@@ -139,7 +121,7 @@ const MenuList: React.FC = () => {
           <a
             key="new-children"
             onClick={() => {
-              createFormRef.current?.onShow(record);
+              createFormRef.current?.onShow(record.id);
             }}
           >
             新建子菜单
@@ -147,22 +129,20 @@ const MenuList: React.FC = () => {
         ]
         if ( record && record.id != '0') {
           const changeButton: React.ReactNode[] = [
-          <a
-            key="update"
-            onClick={() => {
-              setCurrentRow(record);
-              updateFormRef.current?.onUpdate(record.id);
-            }}
-          >
-            修改
-          </a>,
+            <a
+              key="update"
+              onClick={() => {
+                updateFormRef.current?.onUpdate(record.id);
+              }}
+            >
+              修改
+            </a>,
             <Popconfirm
               key="delete"
               title="确定删除该菜单?"
               onConfirm={async () => {
                 const success = await handleRemove(new Array(record))
                 if (success) {
-                  setCurrentRow(undefined);
                   setSelectedRows([]);
                   actionRef.current?.reloadAndRest?.();
                 }
@@ -181,14 +161,6 @@ const MenuList: React.FC = () => {
     },
   ];
 
-  const onFinish = () => {
-    setSelectedRows([]);
-    actionRef.current?.reloadAndRest?.();
-  };
-
-  const onCancel = () => {
-
-  }
 
   return (
     <PageContainer>

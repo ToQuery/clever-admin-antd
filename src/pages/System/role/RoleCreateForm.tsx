@@ -1,13 +1,13 @@
-import React, {forwardRef, useRef, useState} from 'react';
-import {message, Modal, Tree, TreeSelect} from 'antd';
+import React, {forwardRef, useImperativeHandle, useRef, useState} from 'react';
+import {message, Spin, Tree} from 'antd';
 import ProForm, {
   ProFormText,
   ModalForm, ProFormInstance,
 } from '@ant-design/pro-form';
-import { useIntl, FormattedMessage } from 'umi';
+import {useIntl} from 'umi';
 import type {CleverFramework} from "@/services/clever-framework/typings";
-import {systemMenu, systemMenuDetail, systemMenuUpdate} from "@/services/clever-framework/api";
-import {CreateFormProps} from "@/pages/System/menu/MenuCreateForm";
+import {systemMenu, systemRoleAdd} from "@/services/clever-framework/api";
+import {DataNode} from "rc-tree/lib/interface";
 
 export type FormValueType = {
   target?: string;
@@ -17,7 +17,7 @@ export type FormValueType = {
   frequency?: string;
 } & Partial<CleverFramework.RoleListItem>;
 
-export type CreateMenuFormProps = {
+export type UpdateFormProps = {
   onFinish?: any;
   onCancel?: any;
 };
@@ -25,10 +25,10 @@ export type CreateMenuFormProps = {
 /**
  * @param fields
  */
-const handleUpdate = async (fields: CleverFramework.MenuListItem) => {
+const handleAdd = async (fields: CleverFramework.RoleListItem) => {
   const hide = message.loading('正在添加');
   try {
-    await systemMenuUpdate({ ...fields });
+    await systemRoleAdd({ ...fields });
     hide();
     message.success('Added successfully');
     return true;
@@ -40,7 +40,7 @@ const handleUpdate = async (fields: CleverFramework.MenuListItem) => {
 };
 
 
-const RoleCreateForm: React.FC<CreateMenuFormProps> = (props: CreateMenuFormProps, ref: any) => {
+const RoleCreateForm: React.ForwardRefRenderFunction<HTMLFormElement, UpdateFormProps> = (props: UpdateFormProps, ref: any) => {
 
   // 绑定一个 ProFormInstance 实例
   const updateFormRef = useRef<ProFormInstance<CleverFramework.RoleListItem>>();
@@ -48,46 +48,47 @@ const RoleCreateForm: React.FC<CreateMenuFormProps> = (props: CreateMenuFormProp
    * @en-US Pop-up window of new window
    * @zh-CN 新建窗口的弹窗
    *  */
-  const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
+  const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
+
+  const [loading, handleLoading] = useState<boolean>(false);
 
   const [menuTreeData, handleMenuTreeData] = useState<CleverFramework.MenuListItem[]>([]);
 
   const loadTreeData = () => {
 
+    handleLoading(true);
     systemMenu().then(response => {
-      handleMenuTreeData(response.content);
+      // const dataNodes = menuTreeData2DataNode();
+      handleMenuTreeData(response?.content);
+    }).finally(() => {
+      handleLoading(false);
     });
   };
 
-  const onSelect = (selectedKeys: React.Key[], info: any) => {
-    console.log('selected', selectedKeys, info);
-  };
+  /*
+  const menuTreeData2DataNode: DataNode[] = (treeDatas: CleverFramework.MenuListItem[]) => {
+    const dataNodes: any[] = [];
+    for (let i = 0; i < treeDatas.length; i++) {
+      const treeData = treeDatas[i];
+      dataNodes.push({
+        key: treeData.id,
+        title: treeData.menuName,
+        children: ( treeData.children && treeData.children.length > 0 ) ? menuTreeData2DataNode(treeData.children) : []
+      })
+    }
+    return dataNodes;
 
-  const onCheck = (checkedKeys: React.Key[], info: any) => {
-    console.log('onCheck', checkedKeys, info);
-  };
-
+  }*/
 
   const hide = () => {
-    handleUpdateModalVisible(false);
+    handleCreateModalVisible(false);
   }
 
   const show = () => {
-    handleUpdateModalVisible(true);
-  }
-
-  const menuDetail = (id: string) => {
-    systemMenuDetail(id).then(responseParam => {
-      updateFormRef?.current?.setFieldsValue(responseParam.content);
-    })
-  }
-
-  const update = (id: string) => {
     loadTreeData();
-    show();
-    handleUpdateModalVisible(true);
-    menuDetail(id);
+    handleCreateModalVisible(true);
   }
+
 
   const onCancel = () => {
     hide();
@@ -96,7 +97,7 @@ const RoleCreateForm: React.FC<CreateMenuFormProps> = (props: CreateMenuFormProp
 
   const onFinish = async (values: CleverFramework.MenuListItem) => {
     console.info('onFinish', values);
-    const success = await handleUpdate(values);
+    const success = await handleAdd(values);
     if (success) {
       hide();
       props.onFinish();
@@ -108,11 +109,20 @@ const RoleCreateForm: React.FC<CreateMenuFormProps> = (props: CreateMenuFormProp
     console.info('onFinishFailed', values);
   }
 
-
-  const onMenuTreeChange =  (value: any ) => {
-    console.log("onMenuTreeChange", value)
-    updateFormRef?.current?.setFieldsValue({ parentId: value });
+  const onMenuTreeCheck =  (value: any , e: any) => {
+    console.log("onMenuTreeCheck", value, e)
   };
+
+
+  useImperativeHandle(ref,()=>{
+    // 这里return 的对象里面方法和属性可以被父组件调用
+    return {
+      onShow(){
+        // loadMenuTreeData();
+        show();
+      },
+    }
+  })
 
   const intl = useIntl();
 
@@ -124,36 +134,47 @@ const RoleCreateForm: React.FC<CreateMenuFormProps> = (props: CreateMenuFormProp
         defaultMessage: '新建菜单',
       })}
       width="400px"
-      visible={updateModalVisible}
+      visible={createModalVisible}
       // 通过formRef进行绑定
       formRef={ updateFormRef }
       modalProps={ { onCancel: onCancel } }
       onFinish={ onFinish }
       onFinishFailed={ onFinishFailed }
     >
-      <ProFormText
-        rules={[
-          {
-            required: true,
-            message: "角色名称必填",
-          },
-        ]}
-        label="角色名称"
-        width="md"
-        name="roleName"
-      />
-      <ProForm.Item rules={[{required: true, message: '请选择父级信息'}]} name="parentId" label="父级">
-        <Tree
-          checkable
-          key={ 'id' }
-          fieldNames={ { title: 'menuName', key: 'id', children: 'children' } }
-          onSelect={onSelect}
-          onCheck={onCheck}
-          treeData={menuTreeData}
+      <Spin spinning={loading}>
+        <ProFormText
+          rules={[
+            {
+              required: true,
+              message: "角色名称必填",
+            },
+          ]}
+          label="角色名称"
+          width="md"
+          name="roleName"
         />
-      </ProForm.Item>
+        <ProForm.Item
+          rules={[
+            {
+              required: true,
+              message: "菜单权限必填",
+            },
+          ]}
+          label="菜单权限"
+          name="menuIds"
+          initialValue={ "101" }
+        >
+          <Tree
+            checkable={ true }
+            key={ 'id' }
+            fieldNames={ { title: 'menuName', key: 'id', children: 'children' } }
+            onCheck={onMenuTreeCheck}
+            treeData={menuTreeData}
+          />
+        </ProForm.Item>
+      </Spin>
     </ModalForm>
   );
 };
 
-export default forwardRef(RoleCreateForm);
+export default forwardRef<HTMLFormElement, UpdateFormProps>(RoleCreateForm);

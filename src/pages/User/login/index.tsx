@@ -14,7 +14,7 @@ import Footer from '@/components/Footer';
 
 import styles from './index.less';
 import type { CleverFramework } from '@/services/clever-framework/typings';
-import { captcha, login } from '@/services/clever-framework/api';
+import { login } from '@/services/clever-framework/api';
 import { setToken } from '@/utils/cookie';
 
 const Login: React.FC = () => {
@@ -237,10 +237,10 @@ const Login: React.FC = () => {
                 },
               ]}
               onGetCaptcha={async () => {
-                const result = await captcha();
-                if (result === false) {
-                  return;
-                }
+                // const result = await captcha();
+                // if (result === false) {
+                //   return;
+                // }
                 message.success('获取验证码成功！验证码为：1234');
               }}
             />

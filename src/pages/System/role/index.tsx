@@ -8,6 +8,7 @@ import ProTable from '@ant-design/pro-table';
 import { systemRole, systemRoleDelete } from '@/services/clever-framework/api';
 import type {CleverFramework} from "@/services/clever-framework/typings";
 import RoleCreateForm from "./RoleCreateForm";
+import type {AppBase} from "@/services/typings";
 
 
 
@@ -21,9 +22,7 @@ const handleRemove = async (selectedRows: CleverFramework.RoleListItem[]) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
   try {
-    await systemRoleDelete({
-      ids: selectedRows.map((row) => row.id),
-    });
+    await systemRoleDelete(selectedRows.map((row) => row.id));
     hide();
     message.success('Deleted successfully and will refresh soon');
     return true;
@@ -40,7 +39,7 @@ const RoleList: React.FC = () => {
   const [currentRow, setCurrentRow] = useState<CleverFramework.RoleListItem>();
   const [selectedRowsState, setSelectedRows] = useState<CleverFramework.RoleListItem[]>([]);
 
-  const createFormRef = createRef<RoleCreateForm>(); // 初始化ref
+  const createFormRef = createRef<HTMLFormElement>(); // 初始化ref
 
   // const updateFormRef = createRef<RoleCreateForm>(); // 初始化ref
 
@@ -106,7 +105,7 @@ const RoleList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<CleverFramework.RoleListItem, API.PageParams>
+      <ProTable<CleverFramework.RoleListItem, AppBase.PageParams>
         headerTitle={intl.formatMessage({
           id: 'pages.searchTable.title',
           defaultMessage: 'Enquiry form',
@@ -122,17 +121,13 @@ const RoleList: React.FC = () => {
             key="primary"
             onClick={() => {
               // handleModalVisible(true);
-              createFormRef.current?.onShow('0');
+              createFormRef.current?.onShow();
             }}
           >
             <PlusOutlined /> <FormattedMessage id="pages.searchTable.new" defaultMessage="New" />
           </Button>,
         ]}
-        request={async (
-          // 第一个参数 params 查询表单和 params 参数的结合
-          // 第一个参数中一定会有 pageSize 和  current ，这两个参数是 antd 的规范
-          params, sort, filter,
-        ) => {
+        request={async (params) => {
           // 这里需要返回一个 Promise,在返回之前你可以进行数据转化
           // 如果需要转化参数可以在这里进行修改
           const responseParam = await systemRole(params);

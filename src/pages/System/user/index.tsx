@@ -1,61 +1,17 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, message, Input, Drawer } from 'antd';
-import React, { useState, useRef } from 'react';
+import {Button, message, Input, Drawer, Popconfirm} from 'antd';
+import React, {useState, useRef, createRef} from 'react';
 import { useIntl, FormattedMessage } from 'umi';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { ModalForm, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
 import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 import ProDescriptions from '@ant-design/pro-descriptions';
-import type { FormValueType } from './UpdateForm';
-import UpdateForm from './UpdateForm';
-import { systemUser, systemUserAdd, systemUserUpdate, systemUserDelete } from '@/services/clever-framework/api';
+import { systemUser, systemUserDelete } from '@/services/clever-framework/api';
 import type {CleverFramework} from "@/services/clever-framework/typings";
 import {AppBase} from "@/services/typings";
-
-/**
- * @en-US Add node
- * @zh-CN 添加节点
- * @param fields
- */
-const handleAdd = async (fields: API.RuleListItem) => {
-  const hide = message.loading('正在添加');
-  try {
-    await systemUserAdd({ ...fields });
-    hide();
-    message.success('Added successfully');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('Adding failed, please try again!');
-    return false;
-  }
-};
-
-/**
- * @en-US Update node
- * @zh-CN 更新节点
- *
- * @param fields
- */
-const handleUpdate = async (fields: FormValueType) => {
-  const hide = message.loading('Configuring');
-  try {
-    await systemUserUpdate({
-      username: fields.username,
-      id: fields.id,
-    });
-    hide();
-
-    message.success('Configuration is successful');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('Configuration failed, please try again!');
-    return false;
-  }
-};
+import UserCreateForm from "@/pages/System/user/UserCreateForm";
+import UserUpdateForm from "@/pages/System/user/UserUpdateForm";
 
 /**
  *  Delete node
@@ -64,39 +20,42 @@ const handleUpdate = async (fields: FormValueType) => {
  * @param selectedRows
  */
 const handleRemove = async (selectedRows: CleverFramework.UserListItem[]) => {
-  const hide = message.loading('正在删除');
+  const loadingMessage = message.loading('正在删除');
   if (!selectedRows) return true;
+  let success: boolean = false;
   try {
-    await systemUserDelete({
-      ids: selectedRows.map((row) => row.id),
-    });
-    hide();
-    message.success('Deleted successfully and will refresh soon');
-    return true;
+    await systemUserDelete(selectedRows.map((row) => row.id));
+    message.success('删除成功，请稍等!');
+    success = true;
   } catch (error) {
-    hide();
-    message.error('Delete failed, please try again');
-    return false;
+    // message.error('删除失败，请重试');
+  } finally {
+    loadingMessage();
   }
+  return success;
 };
 
 const TableList: React.FC = () => {
-  /**
-   * @en-US Pop-up window of new window
-   * @zh-CN 新建窗口的弹窗
-   *  */
-  const [createModalVisible, handleModalVisible] = useState<boolean>(false);
-  /**
-   * @en-US The pop-up window of the distribution update window
-   * @zh-CN 分布更新窗口的弹窗
-   * */
-  const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
 
   const [showDetail, setShowDetail] = useState<boolean>(false);
 
   const actionRef = useRef<ActionType>();
+
+
   const [currentRow, setCurrentRow] = useState<CleverFramework.UserListItem>();
-  const [selectedRowsState, setSelectedRows] = useState<CleverFramework.UserListItem[]>([]);
+  const [selectedRowsState, setSelectedRows] = useState<CleverFramework.MenuListItem[]>([]);
+
+  const createFormRef = createRef<HTMLFormElement>(); // 初始化ref
+  const updateFormRef = createRef<HTMLFormElement>(); // 初始化ref
+
+  const onFinish = () => {
+    setSelectedRows([]);
+    actionRef.current?.reloadAndRest?.();
+  };
+
+  const onCancel = () => {
+
+  }
 
   /**
    * @en-US International configuration
@@ -113,7 +72,7 @@ const TableList: React.FC = () => {
         />
       ),
       hideInSearch: true,
-      width: 300,
+      width: 160,
       dataIndex: 'id',
       tip: 'The id is the unique key',
       valueType: 'textarea',
@@ -136,27 +95,42 @@ const TableList: React.FC = () => {
       },
     },
     {
-      title: <FormattedMessage id="pages.system.userTable.enabled" defaultMessage="Status" />,
-      dataIndex: 'enabled',
+      title: <FormattedMessage id="pages.system.userTable.nickname" defaultMessage="昵称" />,
+      dataIndex: 'nickname',
+      valueType: 'textarea'
+    },
+    {
+      title: <FormattedMessage id="pages.system.userTable.userStatus" defaultMessage="用户状态" />,
+      dataIndex: 'userStatus',
       sorter: true,
       hideInForm: true,
       valueEnum: {
-        0: {
-          text: (
-            <FormattedMessage id="pages.system.userTable.enabled.true" defaultMessage="Enabled" />
-          ),
-          status: 'true',
-        },
         1: {
           text: (
-            <FormattedMessage id="pages.system.userTable.enabled.false" defaultMessage="Disenable" />
+            <FormattedMessage id="pages.system.userTable.userStatus.enable" defaultMessage="启用" />
           ),
-          status: 'false',
+          status: 1,
+        },
+        0: {
+          text: (
+            <FormattedMessage id="pages.system.userTable.userStatus.disable" defaultMessage="禁用" />
+          ),
+          status: 0,
         },
       },
       renderText: (val: boolean) =>{
-        return val ? `正常` : `已禁用`;
+        return val ? `启用` : `已禁用`;
       },
+    },
+    {
+      title: <FormattedMessage id="pages.system.userTable.phone" defaultMessage="手机号" />,
+      dataIndex: 'phone',
+      valueType: 'textarea'
+    },
+    {
+      title: <FormattedMessage id="pages.system.userTable.email" defaultMessage="邮箱" />,
+      dataIndex: 'email',
+      valueType: 'textarea'
     },
     {
       title: (
@@ -193,19 +167,36 @@ const TableList: React.FC = () => {
       valueType: 'option',
       render: (_, record) => [
         <a
+          key="update"
+          onClick={() => {
+            updateFormRef.current?.onUpdate(record.id);
+          }}
+        >
+          修改
+        </a>,
+        <Popconfirm
+          key="delete"
+          title="确定删除该用户?"
+          onConfirm={async () => {
+            const success = await handleRemove(new Array(record))
+            if (success) {
+              setSelectedRows([]);
+              actionRef.current?.reloadAndRest?.();
+            }
+          }}
+          okText="确定"
+          cancelText="取消"
+        >
+          <a href="#">删除</a>
+        </Popconfirm>,
+        <a
           key="config"
           onClick={() => {
-            handleUpdateModalVisible(true);
+            // handleUpdateModalVisible(true);
             setCurrentRow(record);
           }}
         >
           <FormattedMessage id="pages.searchTable.config" defaultMessage="Configuration" />
-        </a>,
-        <a key="subscribeAlert" href="https://procomponents.ant.design/">
-          <FormattedMessage
-            id="pages.searchTable.subscribeAlert"
-            defaultMessage="Subscribe to alerts"
-          />
         </a>,
       ],
     },
@@ -213,7 +204,7 @@ const TableList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<CleverFramework.UserListItem, AppBase.PageParams & leverFramework.UserListItem>
+      <ProTable<CleverFramework.UserListItem, AppBase.PageParams & CleverFramework.UserListItem>
         headerTitle={intl.formatMessage({
           id: 'pages.searchTable.title',
           defaultMessage: 'Enquiry form',
@@ -228,7 +219,7 @@ const TableList: React.FC = () => {
             type="primary"
             key="primary"
             onClick={() => {
-              handleModalVisible(true);
+              createFormRef.current?.onShow();
             }}
           >
             <PlusOutlined /> <FormattedMessage id="pages.searchTable.new" defaultMessage="New" />
@@ -275,61 +266,8 @@ const TableList: React.FC = () => {
           </Button>
         </FooterToolbar>
       )}
-      <ModalForm
-        title={intl.formatMessage({
-          id: 'pages.searchTable.createForm.newRule',
-          defaultMessage: 'New rule',
-        })}
-        width="400px"
-        visible={createModalVisible}
-        onVisibleChange={handleModalVisible}
-        onFinish={async (value) => {
-          const success = await handleAdd(value as API.RuleListItem);
-          if (success) {
-            handleModalVisible(false);
-            if (actionRef.current) {
-              actionRef.current.reload();
-            }
-          }
-        }}
-      >
-        <ProFormText
-          rules={[
-            {
-              required: true,
-              message: (
-                <FormattedMessage
-                  id="pages.searchTable.ruleName"
-                  defaultMessage="Rule name is required"
-                />
-              ),
-            },
-          ]}
-          width="md"
-          name="name"
-        />
-        <ProFormTextArea width="md" name="desc" />
-      </ModalForm>
-      <UpdateForm
-        onSubmit={async (value) => {
-          const success = await handleUpdate(value);
-          if (success) {
-            handleUpdateModalVisible(false);
-            setCurrentRow(undefined);
-            if (actionRef.current) {
-              actionRef.current.reload();
-            }
-          }
-        }}
-        onCancel={() => {
-          handleUpdateModalVisible(false);
-          if (!showDetail) {
-            setCurrentRow(undefined);
-          }
-        }}
-        updateModalVisible={updateModalVisible}
-        values={currentRow || {}}
-      />
+      <UserCreateForm ref={createFormRef} onFinish={ () => onFinish() } onCancel={ () => onCancel() }/>
+      <UserUpdateForm ref={updateFormRef} onFinish={ () => onFinish() } onCancel={ () => onCancel() }/>
 
       <Drawer
         width={600}
