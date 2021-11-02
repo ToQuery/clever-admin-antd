@@ -8,6 +8,7 @@
  */
 export default {
   dev: {
+    // localhost:8000/api/** -> https://preview.pro.ant.design/api/**
     '/api/': {
       target: 'http://127.0.0.1:8888',
       changeOrigin: true,
@@ -16,7 +17,7 @@ export default {
   },
   test: {
     '/api/': {
-      target: 'https://preview.pro.ant.design',
+      target: 'https://proapi.azurewebsites.net',
       changeOrigin: true,
       pathRewrite: { '^': '' },
     },

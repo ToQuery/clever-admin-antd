@@ -39,6 +39,7 @@ export default defineConfig({
   // Theme for antd: https://ant.design/docs/react/customize-theme-cn
   theme: {
     'primary-color': defaultSettings.primaryColor,
+    'root-entry-name': 'default',
   },
   // esbuild is father build tools
   // https://umijs.org/plugins/plugin-esbuild
@@ -69,9 +70,4 @@ export default defineConfig({
   mfsu: {},
   webpack5: {},
   exportStatic: {},
-  lessLoader: { // https://githubmemory.com/repo/ant-design/ant-design-pro/issues/9082
-    modifyVars: {
-      'root-entry-name': 'default'
-    }
-  }
 });
