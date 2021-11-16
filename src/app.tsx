@@ -8,14 +8,32 @@ import Footer from '@/components/Footer';
 import { userInfo } from './services/clever-framework/api';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
 import type { CleverFramework } from '@/services/clever-framework/typings';
-import { requestInterceptors } from '@/utils/request';
+import {
+  demo1Middleware,
+  demo2Middleware,
+  errorHandler,
+  requestInterceptors,
+  responseInterceptors,
+} from '@/utils/request';
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
 
 export const request: RequestConfig = {
   timeout: 10000,
+  errorConfig: {
+    adaptor: (resData) => {
+      return {
+        ...resData,
+        success: resData.success,
+        errorMessage: resData.message,
+      };
+    },
+  },
+  errorHandler,
+  middlewares: [demo1Middleware, demo2Middleware],
   requestInterceptors: [requestInterceptors],
+  responseInterceptors: [responseInterceptors],
 };
 
 /** 获取用户信息比较慢的时候会展示一个 loading */

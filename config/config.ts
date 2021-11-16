@@ -52,6 +52,9 @@ export default defineConfig({
   },
   // Fast Refresh 热更新
   fastRefresh: {},
+  request: {
+    dataField: 'content',
+  },
   openAPI: [
     {
       requestLibPath: "import { request } from 'umi'",
