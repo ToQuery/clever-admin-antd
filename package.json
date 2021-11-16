@@ -75,7 +75,7 @@
     "umi-serve": "^1.9.10"
   },
   "devDependencies": {
-    "@ant-design/pro-cli": "^2.0.2",
+    "@ant-design/pro-cli": "^2.1.5",
     "@types/express": "^4.17.0",
     "@types/history": "^4.7.2",
     "@types/jest": "^26.0.0",
