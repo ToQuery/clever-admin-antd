@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Tag, message } from 'antd';
 import { groupBy } from 'lodash';
 import moment from 'moment';
@@ -70,11 +70,11 @@ const getUnreadData = (noticeData: Record<string, API.NoticeIconItem[]>) => {
   return unreadMsg;
 };
 
-const NoticeIconView = () => {
+const NoticeIconView: React.FC = () => {
   const { initialState } = useModel('@@initialState');
-  const { currentUser } = initialState || {};
+  const { userInfo } = initialState || {};
   const [notices, setNotices] = useState<API.NoticeIconItem[]>([]);
-  const { data } = useRequest(getNotices);
+  const { data } = useRequest(getNotices());
 
   useEffect(() => {
     setNotices(data || []);
@@ -111,7 +111,8 @@ const NoticeIconView = () => {
   return (
     <NoticeIcon
       className={styles.action}
-      count={currentUser && currentUser.unreadCount}
+      // count={userInfo && userInfo.unreadCount}
+      count={userInfo && 3}
       onItemClick={(item) => {
         changeReadState(item.id!);
       }}
