@@ -1,7 +1,7 @@
 /**
  * @see https://umijs.org/zh-CN/plugins/plugin-access
  * */
-import { CleverFramework } from '@/services/clever-framework/typings';
+import type { CleverFramework } from '@/services/clever-framework/typings';
 
 export default function access(initialState: { userInfo?: CleverFramework.UserInfo | undefined }) {
   const { userInfo } = initialState || {};

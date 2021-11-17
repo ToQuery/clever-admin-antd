@@ -6,7 +6,7 @@ import ProTable from '@ant-design/pro-table';
 
 import { systemLog } from '@/services/clever-framework/api';
 import type {CleverFramework} from "@/services/clever-framework/typings";
-import {AppBase} from "@/services/typings";
+import type {AppBase} from "@/services/typings";
 
 
 const TableList: React.FC = () => {

@@ -9,7 +9,7 @@ import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import { systemUser, systemUserDelete } from '@/services/clever-framework/api';
 import type {CleverFramework} from "@/services/clever-framework/typings";
-import {AppBase} from "@/services/typings";
+import type {AppBase} from "@/services/typings";
 import UserCreateForm from "@/pages/System/user/UserCreateForm";
 import UserUpdateForm from "@/pages/System/user/UserUpdateForm";
 

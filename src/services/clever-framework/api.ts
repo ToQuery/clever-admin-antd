@@ -146,6 +146,13 @@ export async function systemRoleUpdate(systemRoleBody: CleverFramework.RoleListI
   });
 }
 
+export async function systemRoleDetail(id: string) {
+  return request<AppBase.ResponseParam<CleverFramework.RoleListItem>>('/api/sys/role/' + id, {
+    method: 'GET',
+  });
+}
+
+
 export async function systemRoleDelete(ids: (string | undefined)[]) {
   return request('/api/sys/role', {
     method: 'DELETE',

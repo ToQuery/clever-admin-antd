@@ -9,6 +9,7 @@ import { systemRole, systemRoleDelete } from '@/services/clever-framework/api';
 import type {CleverFramework} from "@/services/clever-framework/typings";
 import RoleCreateForm from "./RoleCreateForm";
 import type {AppBase} from "@/services/typings";
+import RoleUpdateForm from "./RoleUpdateForm";
 
 
 
@@ -36,12 +37,14 @@ const handleRemove = async (selectedRows: CleverFramework.RoleListItem[]) => {
 const RoleList: React.FC = () => {
 
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<CleverFramework.RoleListItem>();
+
+  const [, setCurrentRow] = useState<CleverFramework.RoleListItem>();
+
   const [selectedRowsState, setSelectedRows] = useState<CleverFramework.RoleListItem[]>([]);
 
-  const createFormRef = createRef<HTMLFormElement>(); // 初始化ref
+  const createRoleFormRef = createRef<HTMLFormElement>(); // 初始化ref
 
-  // const updateFormRef = createRef<RoleCreateForm>(); // 初始化ref
+  const updateRoleFormRef = createRef<HTMLFormElement>(); // 初始化ref
 
 
   const onFinish = () => {
@@ -92,6 +95,7 @@ const RoleList: React.FC = () => {
           key="update"
           onClick={() => {
             setCurrentRow(record);
+            updateRoleFormRef.current?.onUpdate(record.id);
           }}
         >
           <FormattedMessage id="pages.commonTable.update" defaultMessage="修改" />
@@ -121,7 +125,7 @@ const RoleList: React.FC = () => {
             key="primary"
             onClick={() => {
               // handleModalVisible(true);
-              createFormRef.current?.onShow();
+              createRoleFormRef.current?.onShow();
             }}
           >
             <PlusOutlined /> <FormattedMessage id="pages.searchTable.new" defaultMessage="New" />
@@ -168,7 +172,8 @@ const RoleList: React.FC = () => {
           </Button>
         </FooterToolbar>
       )}
-      <RoleCreateForm ref={createFormRef} onFinish={ () => onFinish() } onCancel={ () => onCancel() }/>
+      <RoleCreateForm ref={createRoleFormRef} onFinish={ () => onFinish() } onCancel={ () => onCancel() }/>
+      <RoleUpdateForm ref={updateRoleFormRef} onFinish={ () => onFinish() } onCancel={ () => onCancel() }/>
     </PageContainer>
   );
 };

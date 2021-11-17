@@ -17,7 +17,7 @@ import {
   systemUserDelete,
 } from '@/services/clever-framework/api';
 import type { CleverFramework } from '@/services/clever-framework/typings';
-import {AppBase} from "@/services/typings";
+import type {AppBase} from "@/services/typings";
 
 /**
  * @en-US Add node
@@ -72,9 +72,7 @@ const handleRemove = async (selectedRows: CleverFramework.UserListItem[]) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
   try {
-    await systemUserDelete({
-      ids: selectedRows.map((row) => row.id),
-    });
+    await systemUserDelete(selectedRows.map((row) => row.id));
     hide();
     message.success('Deleted successfully and will refresh soon');
     return true;

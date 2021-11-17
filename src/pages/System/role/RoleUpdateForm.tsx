@@ -7,7 +7,11 @@ import ProForm, {
 } from '@ant-design/pro-form';
 import {useIntl} from 'umi';
 import type {CleverFramework} from "@/services/clever-framework/typings";
-import {systemMenu, systemRoleAdd} from "@/services/clever-framework/api";
+import {
+  systemMenu,
+  systemRoleUpdate,
+  systemRoleDetail,
+} from "@/services/clever-framework/api";
 // import {DataNode} from "rc-tree/lib/interface";
 
 export type FormValueType = {
@@ -26,30 +30,35 @@ export type UpdateFormProps = {
 /**
  * @param fields
  */
-const handleAdd = async (fields: CleverFramework.RoleListItem) => {
-  const hide = message.loading('正在添加');
+const handleUpdate = async (fields: CleverFramework.RoleListItem) => {
+  const loadingMessage = message.loading('正在修改');
+  let success: boolean = false;
   try {
-    await systemRoleAdd({ ...fields });
-    hide();
-    message.success('Added successfully');
-    return true;
+    await systemRoleUpdate({ ...fields });
+    message.success('修改成功');
+    success = true;
   } catch (error) {
-    hide();
-    message.error('Adding failed, please try again!');
-    return false;
+    debugger
+    console.error(error)
+    debugger
+    message.error('修改失败, 请重试!');
+    debugger
+  } finally {
+    loadingMessage();
   }
+  return success;
 };
 
 
 const RoleCreateForm: React.ForwardRefRenderFunction<HTMLFormElement, UpdateFormProps> = (props: UpdateFormProps, ref: any) => {
 
   // 绑定一个 ProFormInstance 实例
-  const createRoleFormRef = useRef<ProFormInstance<CleverFramework.RoleListItem>>();
+  const updateRoleFormRef = useRef<ProFormInstance<CleverFramework.RoleListItem>>();
   /**
    * @en-US Pop-up window of new window
    * @zh-CN 新建窗口的弹窗
    *  */
-  const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
+  const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
 
   const [loading, handleLoading] = useState<boolean>(false);
 
@@ -81,13 +90,28 @@ const RoleCreateForm: React.ForwardRefRenderFunction<HTMLFormElement, UpdateForm
 
   }*/
 
-  const hide = () => {
-    handleCreateModalVisible(false);
+  const show = () => {
+    handleUpdateModalVisible(true);
   }
 
-  const show = () => {
+  const hide = () => {
+    updateRoleFormRef?.current?.resetFields()
+    handleUpdateModalVisible(false);
+  }
+
+  const roleDetail = (id: string) => {
+    handleLoading(true)
+    systemRoleDetail(id).then(response => {
+      updateRoleFormRef?.current?.setFieldsValue(response.content);
+    }).finally(() => {
+      handleLoading(false)
+    })
+  }
+
+  const update = (id: string) => {
     loadTreeData();
-    handleCreateModalVisible(true);
+    show();
+    roleDetail(id);
   }
 
 
@@ -98,7 +122,7 @@ const RoleCreateForm: React.ForwardRefRenderFunction<HTMLFormElement, UpdateForm
 
   const onFinish = async (values: CleverFramework.MenuListItem) => {
     console.info('onFinish', values);
-    const success = await handleAdd(values);
+    const success = await handleUpdate(values);
     if (success) {
       hide();
       props.onFinish();
@@ -114,12 +138,12 @@ const RoleCreateForm: React.ForwardRefRenderFunction<HTMLFormElement, UpdateForm
   useImperativeHandle(ref,()=>{
     // 这里return 的对象里面方法和属性可以被父组件调用
     return {
-      onShow(){
-        // loadMenuTreeData();
-        show();
+      onUpdate(id: string){
+        update(id);
       },
     }
   })
+
 
   const intl = useIntl();
 
@@ -130,12 +154,12 @@ const RoleCreateForm: React.ForwardRefRenderFunction<HTMLFormElement, UpdateForm
     <ModalForm<CleverFramework.RoleListItem>
       title={intl.formatMessage({
         id: 'pages.system.menuTable.createForm.newMenu',
-        defaultMessage: '新建角色',
+        defaultMessage: '修改角色',
       })}
       width="400px"
-      visible={createModalVisible}
+      visible={updateModalVisible}
       // 通过formRef进行绑定
-      formRef={ createRoleFormRef }
+      formRef={ updateRoleFormRef }
       modalProps={ { onCancel: onCancel } }
       onFinish={ onFinish }
       onFinishFailed={ onFinishFailed }

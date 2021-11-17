@@ -1,6 +1,7 @@
 import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 import { message } from 'antd';
-import { ProFormText, ProFormRadio, ProFormInstance, ModalForm } from '@ant-design/pro-form';
+import type { ProFormInstance} from '@ant-design/pro-form';
+import { ProFormText, ProFormRadio, ModalForm } from '@ant-design/pro-form';
 import { useIntl } from 'umi';
 import type { CleverFramework } from '@/services/clever-framework/typings';
 import { systemUserAdd } from '@/services/clever-framework/api';
