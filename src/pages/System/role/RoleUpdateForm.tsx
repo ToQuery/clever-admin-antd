@@ -1,28 +1,14 @@
-import React, {forwardRef, useImperativeHandle, useRef, useState} from 'react';
-import {message, Spin, Tree} from 'antd';
-import type { ProFormInstance} from '@ant-design/pro-form';
-import ProForm, {
-  ProFormText,
-  ModalForm
-} from '@ant-design/pro-form';
-import {useIntl} from 'umi';
-import type {CleverFramework} from "@/services/clever-framework/typings";
-import {
-  systemMenu,
-  systemRoleUpdate,
-  systemRoleDetail,
-} from "@/services/clever-framework/api";
-// import {DataNode} from "rc-tree/lib/interface";
+import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react';
+import { message, Spin, Tree } from 'antd';
+import type { ProFormInstance } from '@ant-design/pro-form';
+import ProForm, { ProFormText, ModalForm } from '@ant-design/pro-form';
+import { useIntl } from 'umi';
+import type { CleverFramework } from '@/services/clever-framework/typings';
+import { systemMenu, systemRoleUpdate, systemRoleDetail } from '@/services/clever-framework/api';
+import { menuTreeData2DataNode } from '@/services/clever-framework/utils';
+import type { DataNode } from 'rc-tree/lib/interface';
 
-export type FormValueType = {
-  target?: string;
-  template?: string;
-  type?: string;
-  time?: string;
-  frequency?: string;
-} & Partial<CleverFramework.RoleListItem>;
-
-export type UpdateFormProps = {
+export type UpdateRoleFormProps = {
   onFinish?: any;
   onCancel?: any;
 };
@@ -38,20 +24,18 @@ const handleUpdate = async (fields: CleverFramework.RoleListItem) => {
     message.success('修改成功');
     success = true;
   } catch (error) {
-    debugger
-    console.error(error)
-    debugger
+    console.error(error);
     message.error('修改失败, 请重试!');
-    debugger
   } finally {
     loadingMessage();
   }
   return success;
 };
 
-
-const RoleCreateForm: React.ForwardRefRenderFunction<HTMLFormElement, UpdateFormProps> = (props: UpdateFormProps, ref: any) => {
-
+const RoleCreateForm: React.ForwardRefRenderFunction<HTMLFormElement, UpdateRoleFormProps> = (
+  props: UpdateRoleFormProps,
+  ref: any,
+) => {
   // 绑定一个 ProFormInstance 实例
   const updateRoleFormRef = useRef<ProFormInstance<CleverFramework.RoleListItem>>();
   /**
@@ -62,63 +46,49 @@ const RoleCreateForm: React.ForwardRefRenderFunction<HTMLFormElement, UpdateForm
 
   const [loading, handleLoading] = useState<boolean>(false);
 
-  const [menuTreeData, handleMenuTreeData] = useState<CleverFramework.MenuListItem[]>([]);
+  const [menuTreeData, handleMenuTreeData] = useState<DataNode[]>([]);
 
   const loadTreeData = () => {
-
     handleLoading(true);
-    systemMenu().then(response => {
-      // const dataNodes = menuTreeData2DataNode();
-      handleMenuTreeData(response?.content);
-    }).finally(() => {
-      handleLoading(false);
-    });
-  };
-
-  /*
-  const menuTreeData2DataNode: DataNode[] = (treeDatas: CleverFramework.MenuListItem[]) => {
-    const dataNodes: any[] = [];
-    for (let i = 0; i < treeDatas.length; i++) {
-      const treeData = treeDatas[i];
-      dataNodes.push({
-        key: treeData.id,
-        title: treeData.menuName,
-        children: ( treeData.children && treeData.children.length > 0 ) ? menuTreeData2DataNode(treeData.children) : []
+    systemMenu()
+      .then((response) => {
+        handleMenuTreeData(menuTreeData2DataNode(response?.content));
       })
-    }
-    return dataNodes;
-
-  }*/
+      .finally(() => {
+        handleLoading(false);
+      });
+  };
 
   const show = () => {
     handleUpdateModalVisible(true);
-  }
+  };
 
   const hide = () => {
-    updateRoleFormRef?.current?.resetFields()
+    updateRoleFormRef?.current?.resetFields();
     handleUpdateModalVisible(false);
-  }
+  };
 
   const roleDetail = (id: string) => {
-    handleLoading(true)
-    systemRoleDetail(id).then(response => {
-      updateRoleFormRef?.current?.setFieldsValue(response.content);
-    }).finally(() => {
-      handleLoading(false)
-    })
-  }
+    handleLoading(true);
+    systemRoleDetail(id)
+      .then((response) => {
+        updateRoleFormRef?.current?.setFieldsValue(response.content);
+      })
+      .finally(() => {
+        handleLoading(false);
+      });
+  };
 
   const update = (id: string) => {
     loadTreeData();
     show();
     roleDetail(id);
-  }
-
+  };
 
   const onCancel = () => {
     hide();
     props.onCancel();
-  }
+  };
 
   const onFinish = async (values: CleverFramework.MenuListItem) => {
     console.info('onFinish', values);
@@ -127,29 +97,23 @@ const RoleCreateForm: React.ForwardRefRenderFunction<HTMLFormElement, UpdateForm
       hide();
       props.onFinish();
     }
-  }
-
+  };
 
   const onFinishFailed = (values: any) => {
     console.info('onFinishFailed', values);
-  }
+  };
 
-
-  useImperativeHandle(ref,()=>{
+  useImperativeHandle(ref, () => {
     // 这里return 的对象里面方法和属性可以被父组件调用
     return {
-      onUpdate(id: string){
+      onUpdate(id: string) {
         update(id);
       },
-    }
-  })
-
+    };
+  });
 
   const intl = useIntl();
 
-
-  // @ts-ignore
-  // @ts-ignore
   return (
     <ModalForm<CleverFramework.RoleListItem>
       title={intl.formatMessage({
@@ -159,17 +123,18 @@ const RoleCreateForm: React.ForwardRefRenderFunction<HTMLFormElement, UpdateForm
       width="400px"
       visible={updateModalVisible}
       // 通过formRef进行绑定
-      formRef={ updateRoleFormRef }
-      modalProps={ { onCancel: onCancel } }
-      onFinish={ onFinish }
-      onFinishFailed={ onFinishFailed }
+      formRef={updateRoleFormRef}
+      modalProps={{ onCancel: onCancel }}
+      onFinish={onFinish}
+      onFinishFailed={onFinishFailed}
     >
       <Spin spinning={loading}>
+        <ProFormText disabled={true} label="id" width="md" name="id" />
         <ProFormText
           rules={[
             {
               required: true,
-              message: "角色名称必填",
+              message: '角色名称必填',
             },
           ]}
           label="角色名称"
@@ -180,25 +145,33 @@ const RoleCreateForm: React.ForwardRefRenderFunction<HTMLFormElement, UpdateForm
           rules={[
             {
               required: true,
-              message: "菜单权限必填",
+              message: '菜单权限必填',
             },
           ]}
           label="菜单权限"
           name="menuIds"
-          initialValue={ [] }
-          valuePropName={ "checkedKeys" }
-          trigger={ "onCheck" }
+          initialValue={[]}
+          // TODO 需要获取半选中的节点
+          // getValueFromEvent={ (checkedKeys, event: any) => {
+          //   console.info('getValueFromEvent', checkedKeys, event);
+          //   debugger
+          //   return checkedKeys.concat(event.halfCheckedKeys)
+          // }}
+
+          // getValueProps={ (value: StoreValue) => {
+          //   console.info(value);
+          //   debugger
+          //   return value;
+          // }}
+
+          valuePropName={'checkedKeys'}
+          trigger={'onCheck'}
         >
-          <Tree
-            checkable={ true }
-            key={ 'id' }
-            fieldNames={ { title: 'menuName', key: 'id', children: 'children' } }
-            treeData={menuTreeData}
-          />
+          <Tree checkable={true} key={'id'} treeData={menuTreeData} />
         </ProForm.Item>
       </Spin>
     </ModalForm>
   );
 };
 
-export default forwardRef<HTMLFormElement, UpdateFormProps>(RoleCreateForm);
+export default forwardRef<HTMLFormElement, UpdateRoleFormProps>(RoleCreateForm);

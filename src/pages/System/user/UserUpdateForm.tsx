@@ -1,30 +1,15 @@
-import React, {forwardRef, useImperativeHandle, useRef, useState} from 'react';
-import {message, Spin,} from 'antd';
-import {
-  ProFormText,
-  ProFormRadio,
-  ProFormInstance, ModalForm,
-} from '@ant-design/pro-form';
+import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react';
+import { message, Spin } from 'antd';
+import type { ProFormInstance } from '@ant-design/pro-form';
+import { ProFormText, ProFormRadio, ModalForm } from '@ant-design/pro-form';
 import { useIntl } from 'umi';
-import type {CleverFramework} from "@/services/clever-framework/typings";
-import {
-  systemUserDetail,
-  systemUserUpdate
-} from "@/services/clever-framework/api";
-
-export type FormValueType = {
-  target?: string;
-  template?: string;
-  type?: string;
-  time?: string;
-  frequency?: string;
-} & Partial<CleverFramework.UserListItem>;
+import type { CleverFramework } from '@/services/clever-framework/typings';
+import { systemUserDetail, systemUserUpdate } from '@/services/clever-framework/api';
 
 export type UpdateUserFormProps = {
   onFinish?: any;
   onCancel?: any;
 };
-
 
 /**
  * @param fields
@@ -37,19 +22,21 @@ const handleUpdate = async (fields: CleverFramework.UserListItem) => {
     message.success('修改成功');
     success = true;
   } catch (error) {
-    debugger
-    console.error(error)
-    debugger
+    debugger;
+    console.error(error);
+    debugger;
     message.error('修改失败, 请重试!');
-    debugger
+    debugger;
   } finally {
     loadingMessage();
   }
   return success;
 };
 
-const UserUpdateForm: React.ForwardRefRenderFunction<HTMLFormElement, UpdateUserFormProps> = (props, ref: any) => {
-
+const UserUpdateForm: React.ForwardRefRenderFunction<HTMLFormElement, UpdateUserFormProps> = (
+  props,
+  ref: any,
+) => {
   // 绑定一个 ProFormInstance 实例
   const updateFormRef = useRef<ProFormInstance<CleverFramework.UserListItem>>();
 
@@ -59,31 +46,32 @@ const UserUpdateForm: React.ForwardRefRenderFunction<HTMLFormElement, UpdateUser
 
   const hide = () => {
     handleUpdateModalVisible(false);
-  }
+  };
 
   const show = () => {
     handleUpdateModalVisible(true);
-  }
+  };
 
   const userDetail = (id: string) => {
-    handleLoading(true)
-    systemUserDetail(id).then(response => {
-      updateFormRef?.current?.setFieldsValue(response.content);
-    }).finally(() => {
-      handleLoading(false)
-    })
-  }
+    handleLoading(true);
+    systemUserDetail(id)
+      .then((response) => {
+        updateFormRef?.current?.setFieldsValue(response.content);
+      })
+      .finally(() => {
+        handleLoading(false);
+      });
+  };
 
   const update = (id: string) => {
     show();
     userDetail(id);
-  }
+  };
 
   const onCancel = () => {
     hide();
     props.onCancel();
-  }
-
+  };
 
   const onFinish = async (values: CleverFramework.UserListItem) => {
     console.info('onFinish', values);
@@ -92,20 +80,20 @@ const UserUpdateForm: React.ForwardRefRenderFunction<HTMLFormElement, UpdateUser
       hide();
       props.onFinish();
     }
-  }
+  };
 
   const onFinishFailed = (values: any) => {
     console.info('onFinishFailed', values);
-  }
+  };
 
-  useImperativeHandle(ref,()=>{
+  useImperativeHandle(ref, () => {
     // 这里return 的对象里面方法和属性可以被父组件调用
     return {
-      onUpdate(id: string){
+      onUpdate(id: string) {
         update(id);
       },
-    }
-  })
+    };
+  });
 
   const intl = useIntl();
 
@@ -118,17 +106,18 @@ const UserUpdateForm: React.ForwardRefRenderFunction<HTMLFormElement, UpdateUser
       width="400px"
       visible={updateModalVisible}
       // 通过formRef进行绑定
-      formRef={ updateFormRef }
-      modalProps={ { onCancel: onCancel } }
-      onFinish={ onFinish }
-      onFinishFailed={ onFinishFailed }
+      formRef={updateFormRef}
+      modalProps={{ onCancel: onCancel }}
+      onFinish={onFinish}
+      onFinishFailed={onFinishFailed}
     >
       <Spin spinning={loading}>
+        <ProFormText disabled={true} label="id" width="md" name="id" />
         <ProFormText
           rules={[
             {
               required: true,
-              message: "用户名必填",
+              message: '用户名必填',
             },
           ]}
           label="用户名"
@@ -139,23 +128,15 @@ const UserUpdateForm: React.ForwardRefRenderFunction<HTMLFormElement, UpdateUser
           rules={[
             {
               required: true,
-              message: "用户昵称必填",
+              message: '用户昵称必填',
             },
           ]}
           label="用户昵称"
           width="md"
           name="nickname"
         />
-        <ProFormText
-          label="手机号"
-          width="md"
-          name="phone"
-        />
-        <ProFormText
-          label="邮箱"
-          width="md"
-          name="email"
-        />
+        <ProFormText label="手机号" width="md" name="phone" />
+        <ProFormText label="邮箱" width="md" name="email" />
         <ProFormRadio.Group
           name="userStatus"
           label={intl.formatMessage({
@@ -172,7 +153,7 @@ const UserUpdateForm: React.ForwardRefRenderFunction<HTMLFormElement, UpdateUser
               label: '禁用',
             },
           ]}
-          initialValue={ 1 }
+          initialValue={1}
         />
       </Spin>
     </ModalForm>

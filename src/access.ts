@@ -8,6 +8,8 @@ export default function access(initialState: { userInfo?: CleverFramework.UserIn
   console.log(userInfo);
   return {
     canAdmin: true,
-    cleverAccess: true,
+    cleverAccess: (route: any) => {
+      return userInfo?.codes.includes(route.code);
+    },
   };
 }

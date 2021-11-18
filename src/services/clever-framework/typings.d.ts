@@ -2,7 +2,6 @@
 /* eslint-disable */
 
 import { Protocol } from 'puppeteer-core';
-import {DataNode} from "rc-tree/lib/interface";
 
 declare namespace CleverFramework {
   type LoginRequest = {
@@ -23,11 +22,11 @@ declare namespace CleverFramework {
 
   type UserInfo = {
     id?: string;
-    username?: string;
+    username: string;
     avatar?: string;
-    nickname?: string;
+    nickname: string;
     email?: string;
-    codes?: string[];
+    codes: string[];
     authorities?: {
       menuName?: string;
       menuCode?: string;
@@ -60,7 +59,7 @@ declare namespace CleverFramework {
     roleName?: string;
   };
 
-  type LogType = 'CREATE' | 'MODIFY' | 'DELETE'| 'QUERY';
+  type LogType = 'CREATE' | 'MODIFY' | 'DELETE' | 'QUERY';
 
   type LogListItem = {
     id?: string;
@@ -73,5 +72,4 @@ declare namespace CleverFramework {
     sysUser?: UserListItem;
     createDateTime?: string;
   };
-
 }

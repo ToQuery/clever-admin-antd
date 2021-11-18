@@ -1,24 +1,15 @@
-import React, {forwardRef, useImperativeHandle, useRef, useState} from 'react';
-import {message, Spin, Tree} from 'antd';
-import type { ProFormInstance} from '@ant-design/pro-form';
-import ProForm, {
-  ProFormText,
-  ModalForm
-} from '@ant-design/pro-form';
-import {useIntl} from 'umi';
-import type {CleverFramework} from "@/services/clever-framework/typings";
-import {systemMenu, systemRoleAdd} from "@/services/clever-framework/api";
+import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react';
+import { message, Spin, Tree } from 'antd';
+import type { ProFormInstance } from '@ant-design/pro-form';
+import ProForm, { ProFormText, ModalForm } from '@ant-design/pro-form';
+import { useIntl } from 'umi';
+import type { CleverFramework } from '@/services/clever-framework/typings';
+import { systemMenu, systemRoleAdd } from '@/services/clever-framework/api';
+import { menuTreeData2DataNode } from '@/services/clever-framework/utils';
+import { DataNode } from 'rc-tree/lib/interface';
 // import {DataNode} from "rc-tree/lib/interface";
 
-export type FormValueType = {
-  target?: string;
-  template?: string;
-  type?: string;
-  time?: string;
-  frequency?: string;
-} & Partial<CleverFramework.RoleListItem>;
-
-export type UpdateFormProps = {
+export type CreateRoleFormProps = {
   onFinish?: any;
   onCancel?: any;
 };
@@ -40,9 +31,10 @@ const handleAdd = async (fields: CleverFramework.RoleListItem) => {
   }
 };
 
-
-const RoleCreateForm: React.ForwardRefRenderFunction<HTMLFormElement, UpdateFormProps> = (props: UpdateFormProps, ref: any) => {
-
+const RoleCreateForm: React.ForwardRefRenderFunction<HTMLFormElement, CreateRoleFormProps> = (
+  props: CreateRoleFormProps,
+  ref: any,
+) => {
   // 绑定一个 ProFormInstance 实例
   const createRoleFormRef = useRef<ProFormInstance<CleverFramework.RoleListItem>>();
   /**
@@ -53,48 +45,32 @@ const RoleCreateForm: React.ForwardRefRenderFunction<HTMLFormElement, UpdateForm
 
   const [loading, handleLoading] = useState<boolean>(false);
 
-  const [menuTreeData, handleMenuTreeData] = useState<CleverFramework.MenuListItem[]>([]);
+  const [menuTreeData, handleMenuTreeData] = useState<DataNode[]>([]);
 
   const loadTreeData = () => {
-
     handleLoading(true);
-    systemMenu().then(response => {
-      // const dataNodes = menuTreeData2DataNode();
-      handleMenuTreeData(response?.content);
-    }).finally(() => {
-      handleLoading(false);
-    });
-  };
-
-  /*
-  const menuTreeData2DataNode: DataNode[] = (treeDatas: CleverFramework.MenuListItem[]) => {
-    const dataNodes: any[] = [];
-    for (let i = 0; i < treeDatas.length; i++) {
-      const treeData = treeDatas[i];
-      dataNodes.push({
-        key: treeData.id,
-        title: treeData.menuName,
-        children: ( treeData.children && treeData.children.length > 0 ) ? menuTreeData2DataNode(treeData.children) : []
+    systemMenu()
+      .then((response) => {
+        handleMenuTreeData(menuTreeData2DataNode(response?.content));
       })
-    }
-    return dataNodes;
-
-  }*/
+      .finally(() => {
+        handleLoading(false);
+      });
+  };
 
   const hide = () => {
     handleCreateModalVisible(false);
-  }
+  };
 
   const show = () => {
     loadTreeData();
     handleCreateModalVisible(true);
-  }
-
+  };
 
   const onCancel = () => {
     hide();
     props.onCancel();
-  }
+  };
 
   const onFinish = async (values: CleverFramework.MenuListItem) => {
     console.info('onFinish', values);
@@ -103,26 +79,23 @@ const RoleCreateForm: React.ForwardRefRenderFunction<HTMLFormElement, UpdateForm
       hide();
       props.onFinish();
     }
-  }
-
+  };
 
   const onFinishFailed = (values: any) => {
     console.info('onFinishFailed', values);
-  }
+  };
 
-
-  useImperativeHandle(ref,()=>{
+  useImperativeHandle(ref, () => {
     // 这里return 的对象里面方法和属性可以被父组件调用
     return {
-      onShow(){
+      onShow() {
         // loadMenuTreeData();
         show();
       },
-    }
-  })
+    };
+  });
 
   const intl = useIntl();
-
 
   // @ts-ignore
   // @ts-ignore
@@ -135,17 +108,17 @@ const RoleCreateForm: React.ForwardRefRenderFunction<HTMLFormElement, UpdateForm
       width="400px"
       visible={createModalVisible}
       // 通过formRef进行绑定
-      formRef={ createRoleFormRef }
-      modalProps={ { onCancel: onCancel } }
-      onFinish={ onFinish }
-      onFinishFailed={ onFinishFailed }
+      formRef={createRoleFormRef}
+      modalProps={{ onCancel: onCancel }}
+      onFinish={onFinish}
+      onFinishFailed={onFinishFailed}
     >
       <Spin spinning={loading}>
         <ProFormText
           rules={[
             {
               required: true,
-              message: "角色名称必填",
+              message: '角色名称必填',
             },
           ]}
           label="角色名称"
@@ -156,25 +129,20 @@ const RoleCreateForm: React.ForwardRefRenderFunction<HTMLFormElement, UpdateForm
           rules={[
             {
               required: true,
-              message: "菜单权限必填",
+              message: '菜单权限必填',
             },
           ]}
           label="菜单权限"
           name="menuIds"
-          initialValue={ [] }
-          valuePropName={ "checkedKeys" }
-          trigger={ "onCheck" }
+          initialValue={[]}
+          valuePropName={'checkedKeys'}
+          trigger={'onCheck'}
         >
-          <Tree
-            checkable={ true }
-            key={ 'id' }
-            fieldNames={ { title: 'menuName', key: 'id', children: 'children' } }
-            treeData={menuTreeData}
-          />
+          <Tree checkable={true} key={'id'} treeData={menuTreeData} />
         </ProForm.Item>
       </Spin>
     </ModalForm>
   );
 };
 
-export default forwardRef<HTMLFormElement, UpdateFormProps>(RoleCreateForm);
+export default forwardRef<HTMLFormElement, CreateRoleFormProps>(RoleCreateForm);

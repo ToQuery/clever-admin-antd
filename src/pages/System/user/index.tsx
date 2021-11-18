@@ -1,6 +1,6 @@
 import { PlusOutlined } from '@ant-design/icons';
-import {Button, message, Input, Drawer, Popconfirm} from 'antd';
-import React, {useState, useRef, createRef} from 'react';
+import { Button, message, Input, Drawer, Popconfirm } from 'antd';
+import React, { useState, useRef, createRef } from 'react';
 import { useIntl, FormattedMessage } from 'umi';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
@@ -8,10 +8,10 @@ import ProTable from '@ant-design/pro-table';
 import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import { systemUser, systemUserDelete } from '@/services/clever-framework/api';
-import type {CleverFramework} from "@/services/clever-framework/typings";
-import type {AppBase} from "@/services/typings";
-import UserCreateForm from "@/pages/System/user/UserCreateForm";
-import UserUpdateForm from "@/pages/System/user/UserUpdateForm";
+import type { CleverFramework } from '@/services/clever-framework/typings';
+import type { AppBase } from '@/services/typings';
+import UserCreateForm from '@/pages/System/user/UserCreateForm';
+import UserUpdateForm from '@/pages/System/user/UserUpdateForm';
 
 /**
  *  Delete node
@@ -36,26 +36,22 @@ const handleRemove = async (selectedRows: CleverFramework.UserListItem[]) => {
 };
 
 const TableList: React.FC = () => {
-
   const [showDetail, setShowDetail] = useState<boolean>(false);
 
   const actionRef = useRef<ActionType>();
 
-
   const [currentRow, setCurrentRow] = useState<CleverFramework.UserListItem>();
   const [selectedRowsState, setSelectedRows] = useState<CleverFramework.MenuListItem[]>([]);
 
-  const createFormRef = createRef<HTMLFormElement>(); // 初始化ref
-  const updateFormRef = createRef<HTMLFormElement>(); // 初始化ref
+  const createUserFormRef = createRef<HTMLFormElement>(); // 初始化ref
+  const updateUserFormRef = createRef<HTMLFormElement>(); // 初始化ref
 
   const onFinish = () => {
     setSelectedRows([]);
     actionRef.current?.reloadAndRest?.();
   };
 
-  const onCancel = () => {
-
-  }
+  const onCancel = () => {};
 
   /**
    * @en-US International configuration
@@ -65,12 +61,7 @@ const TableList: React.FC = () => {
 
   const columns: ProColumns<CleverFramework.UserListItem>[] = [
     {
-      title: (
-        <FormattedMessage
-          id="pages.system.userTable.id"
-          defaultMessage="Id"
-        />
-      ),
+      title: <FormattedMessage id="pages.system.userTable.id" defaultMessage="Id" />,
       hideInSearch: true,
       width: 160,
       dataIndex: 'id',
@@ -97,7 +88,7 @@ const TableList: React.FC = () => {
     {
       title: <FormattedMessage id="pages.system.userTable.nickname" defaultMessage="昵称" />,
       dataIndex: 'nickname',
-      valueType: 'textarea'
+      valueType: 'textarea',
     },
     {
       title: <FormattedMessage id="pages.system.userTable.userStatus" defaultMessage="用户状态" />,
@@ -113,24 +104,27 @@ const TableList: React.FC = () => {
         },
         0: {
           text: (
-            <FormattedMessage id="pages.system.userTable.userStatus.disable" defaultMessage="禁用" />
+            <FormattedMessage
+              id="pages.system.userTable.userStatus.disable"
+              defaultMessage="禁用"
+            />
           ),
           status: 0,
         },
       },
-      renderText: (val: boolean) =>{
+      renderText: (val: boolean) => {
         return val ? `启用` : `已禁用`;
       },
     },
     {
       title: <FormattedMessage id="pages.system.userTable.phone" defaultMessage="手机号" />,
       dataIndex: 'phone',
-      valueType: 'textarea'
+      valueType: 'textarea',
     },
     {
       title: <FormattedMessage id="pages.system.userTable.email" defaultMessage="邮箱" />,
       dataIndex: 'email',
-      valueType: 'textarea'
+      valueType: 'textarea',
     },
     {
       title: (
@@ -169,7 +163,7 @@ const TableList: React.FC = () => {
         <a
           key="update"
           onClick={() => {
-            updateFormRef.current?.onUpdate(record.id);
+            updateUserFormRef.current?.onUpdate(record.id);
           }}
         >
           修改
@@ -178,7 +172,7 @@ const TableList: React.FC = () => {
           key="delete"
           title="确定删除该用户?"
           onConfirm={async () => {
-            const success = await handleRemove(new Array(record))
+            const success = await handleRemove(new Array(record));
             if (success) {
               setSelectedRows([]);
               actionRef.current?.reloadAndRest?.();
@@ -219,7 +213,7 @@ const TableList: React.FC = () => {
             type="primary"
             key="primary"
             onClick={() => {
-              createFormRef.current?.onShow();
+              createUserFormRef.current?.onShow();
             }}
           >
             <PlusOutlined /> <FormattedMessage id="pages.searchTable.new" defaultMessage="New" />
@@ -266,8 +260,16 @@ const TableList: React.FC = () => {
           </Button>
         </FooterToolbar>
       )}
-      <UserCreateForm ref={createFormRef} onFinish={ () => onFinish() } onCancel={ () => onCancel() }/>
-      <UserUpdateForm ref={updateFormRef} onFinish={ () => onFinish() } onCancel={ () => onCancel() }/>
+      <UserCreateForm
+        ref={createUserFormRef}
+        onFinish={() => onFinish()}
+        onCancel={() => onCancel()}
+      />
+      <UserUpdateForm
+        ref={updateUserFormRef}
+        onFinish={() => onFinish()}
+        onCancel={() => onCancel()}
+      />
 
       <Drawer
         width={600}

@@ -1,6 +1,6 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, message, Popconfirm} from 'antd';
-import React, {useState, useRef, createRef} from 'react';
+import { Button, message, Popconfirm } from 'antd';
+import React, { useState, useRef, createRef } from 'react';
 import { useIntl, FormattedMessage } from 'umi';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
@@ -8,9 +8,8 @@ import ProTable from '@ant-design/pro-table';
 import MenuCreateForm from './MenuCreateForm';
 import MenuUpdateForm from './MenuUpdateForm';
 import { systemMenu, systemMenuDelete } from '@/services/clever-framework/api';
-import type {CleverFramework} from "@/services/clever-framework/typings";
-import type {AppBase} from "@/services/typings";
-
+import type { CleverFramework } from '@/services/clever-framework/typings';
+import type { AppBase } from '@/services/typings';
 
 /**
  *  Delete node
@@ -35,22 +34,19 @@ const handleRemove = async (selectedRows: CleverFramework.MenuListItem[]) => {
 };
 
 const MenuList: React.FC = () => {
-
   const actionRef = useRef<ActionType>();
 
   const [selectedRowsState, setSelectedRows] = useState<CleverFramework.MenuListItem[]>([]);
 
-  const createFormRef = createRef<HTMLFormElement>(); // 初始化ref
-  const updateFormRef = createRef<HTMLFormElement>(); // 初始化ref
+  const createMenuFormRef = createRef<HTMLFormElement>(); // 初始化ref
+  const updateMenuFormRef = createRef<HTMLFormElement>(); // 初始化ref
 
   const onFinish = () => {
     setSelectedRows([]);
     actionRef.current?.reloadAndRest?.();
   };
 
-  const onCancel = () => {
-
-  }
+  const onCancel = () => {};
 
   /**
    * @en-US International configuration
@@ -60,12 +56,7 @@ const MenuList: React.FC = () => {
 
   const columns: ProColumns<CleverFramework.MenuListItem>[] = [
     {
-      title: (
-        <FormattedMessage
-          id="pages.system.menuTable.id"
-          defaultMessage="Id"
-        />
-      ),
+      title: <FormattedMessage id="pages.system.menuTable.id" defaultMessage="Id" />,
       hideInSearch: true,
       width: 300,
       dataIndex: 'id',
@@ -77,35 +68,20 @@ const MenuList: React.FC = () => {
       valueType: 'textarea',
     },
     {
-      title: (
-        <FormattedMessage
-          id="pages.system.menuTable.menuCode"
-          defaultMessage="menuCode"
-        />
-      ),
+      title: <FormattedMessage id="pages.system.menuTable.menuCode" defaultMessage="menuCode" />,
       hideInSearch: true,
       dataIndex: 'menuCode',
       tip: 'The id is the unique key',
       valueType: 'textarea',
     },
     {
-      title: (
-        <FormattedMessage
-          id="pages.system.menuTable.menuLevel"
-          defaultMessage="menuLevel"
-        />
-      ),
+      title: <FormattedMessage id="pages.system.menuTable.menuLevel" defaultMessage="menuLevel" />,
       hideInSearch: true,
       dataIndex: 'menuLevel',
       valueType: 'textarea',
     },
     {
-      title: (
-        <FormattedMessage
-          id="pages.system.menuTable.sortNum"
-          defaultMessage="sortNum"
-        />
-      ),
+      title: <FormattedMessage id="pages.system.menuTable.sortNum" defaultMessage="sortNum" />,
       hideInSearch: true,
       dataIndex: 'sortNum',
       tip: 'The id is the unique key',
@@ -121,18 +97,18 @@ const MenuList: React.FC = () => {
           <a
             key="new-children"
             onClick={() => {
-              createFormRef.current?.onShow(record.id);
+              createMenuFormRef.current?.onShow(record.id);
             }}
           >
             新建子菜单
           </a>,
-        ]
-        if ( record && record.id != '0') {
+        ];
+        if (record && record.id != '0') {
           const changeButton: React.ReactNode[] = [
             <a
               key="update"
               onClick={() => {
-                updateFormRef.current?.onUpdate(record.id);
+                updateMenuFormRef.current?.onUpdate(record.id);
               }}
             >
               修改
@@ -141,7 +117,7 @@ const MenuList: React.FC = () => {
               key="delete"
               title="确定删除该菜单?"
               onConfirm={async () => {
-                const success = await handleRemove(new Array(record))
+                const success = await handleRemove(new Array(record));
                 if (success) {
                   setSelectedRows([]);
                   actionRef.current?.reloadAndRest?.();
@@ -152,15 +128,14 @@ const MenuList: React.FC = () => {
             >
               <a href="#">删除</a>
             </Popconfirm>,
-          ]
+          ];
           optionButtons.push(changeButton);
         }
 
         return optionButtons;
-      }
+      },
     },
   ];
-
 
   return (
     <PageContainer>
@@ -180,7 +155,7 @@ const MenuList: React.FC = () => {
             type="primary"
             key="primary"
             onClick={() => {
-              createFormRef.current?.onShow('0');
+              createMenuFormRef.current?.onShow('0');
             }}
           >
             <PlusOutlined /> <FormattedMessage id="pages.searchTable.new" defaultMessage="New" />
@@ -226,8 +201,16 @@ const MenuList: React.FC = () => {
           </Button>
         </FooterToolbar>
       )}
-      <MenuCreateForm ref={createFormRef} onFinish={ () => onFinish() } onCancel={ () => onCancel() }/>
-      <MenuUpdateForm ref={updateFormRef} onFinish={ () => onFinish() } onCancel={ () => onCancel() }/>
+      <MenuCreateForm
+        ref={createMenuFormRef}
+        onFinish={() => onFinish()}
+        onCancel={() => onCancel()}
+      />
+      <MenuUpdateForm
+        ref={updateMenuFormRef}
+        onFinish={() => onFinish()}
+        onCancel={() => onCancel()}
+      />
     </PageContainer>
   );
 };

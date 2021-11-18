@@ -1,23 +1,14 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, message, Input, Drawer } from 'antd';
+import { Button, message, Input } from 'antd';
 import React, { useState, useRef } from 'react';
 import { useIntl, FormattedMessage } from 'umi';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { ModalForm, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
-import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
-import ProDescriptions from '@ant-design/pro-descriptions';
-import type { FormValueType } from './UpdateForm';
-import UpdateForm from './UpdateForm';
-import {
-  systemUser,
-  systemUserAdd,
-  systemUserUpdate,
-  systemUserDelete,
-} from '@/services/clever-framework/api';
+import { systemUser, systemUserAdd, systemUserDelete } from '@/services/clever-framework/api';
 import type { CleverFramework } from '@/services/clever-framework/typings';
-import type {AppBase} from "@/services/typings";
+import type { AppBase } from '@/services/typings';
 
 /**
  * @en-US Add node
@@ -34,30 +25,6 @@ const handleAdd = async (fields: API.RuleListItem) => {
   } catch (error) {
     hide();
     message.error('Adding failed, please try again!');
-    return false;
-  }
-};
-
-/**
- * @en-US Update node
- * @zh-CN 更新节点
- *
- * @param fields
- */
-const handleUpdate = async (fields: FormValueType) => {
-  const hide = message.loading('Configuring');
-  try {
-    await systemUserUpdate({
-      username: fields.username,
-      id: fields.id,
-    });
-    hide();
-
-    message.success('Configuration is successful');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('Configuration failed, please try again!');
     return false;
   }
 };
@@ -93,12 +60,12 @@ const TableList: React.FC = () => {
    * @en-US The pop-up window of the distribution update window
    * @zh-CN 分布更新窗口的弹窗
    * */
-  const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
+  const [, handleUpdateModalVisible] = useState<boolean>(false);
 
-  const [showDetail, setShowDetail] = useState<boolean>(false);
+  const [, setShowDetail] = useState<boolean>(false);
 
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<CleverFramework.UserListItem>();
+  const [, setCurrentRow] = useState<CleverFramework.UserListItem>();
   const [selectedRowsState, setSelectedRows] = useState<CleverFramework.UserListItem[]>([]);
 
   /**
@@ -310,50 +277,6 @@ const TableList: React.FC = () => {
         />
         <ProFormTextArea width="md" name="desc" />
       </ModalForm>
-      <UpdateForm
-        onSubmit={async (value) => {
-          const success = await handleUpdate(value);
-          if (success) {
-            handleUpdateModalVisible(false);
-            setCurrentRow(undefined);
-            if (actionRef.current) {
-              actionRef.current.reload();
-            }
-          }
-        }}
-        onCancel={() => {
-          handleUpdateModalVisible(false);
-          if (!showDetail) {
-            setCurrentRow(undefined);
-          }
-        }}
-        updateModalVisible={updateModalVisible}
-        values={currentRow || {}}
-      />
-
-      <Drawer
-        width={600}
-        visible={showDetail}
-        onClose={() => {
-          setCurrentRow(undefined);
-          setShowDetail(false);
-        }}
-        closable={false}
-      >
-        {currentRow?.username && (
-          <ProDescriptions<CleverFramework.UserListItem>
-            column={2}
-            title={currentRow?.username}
-            request={async () => ({
-              data: currentRow || {},
-            })}
-            params={{
-              id: currentRow?.id,
-            }}
-            columns={columns as ProDescriptionsItemProps<CleverFramework.UserListItem>[]}
-          />
-        )}
-      </Drawer>
     </PageContainer>
   );
 };
