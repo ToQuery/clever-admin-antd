@@ -1,18 +1,16 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, message, Input, Drawer, Popconfirm } from 'antd';
+import { Button, message, Input, Popconfirm } from 'antd';
 import React, { useState, useRef, createRef } from 'react';
 import { useIntl, FormattedMessage } from 'umi';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
-import ProDescriptions from '@ant-design/pro-descriptions';
 import { systemUser, systemUserDelete } from '@/services/clever-framework/api';
 import type { CleverFramework } from '@/services/clever-framework/typings';
 import type { AppBase } from '@/services/typings';
 import UserCreateForm from '@/pages/System/user/UserCreateForm';
 import UserUpdateForm from '@/pages/System/user/UserUpdateForm';
-
+import UserAuthorizeForm from '@/pages/System/user/UserAuthorizeForm';
 /**
  *  Delete node
  * @zh-CN 删除节点
@@ -36,15 +34,14 @@ const handleRemove = async (selectedRows: CleverFramework.UserListItem[]) => {
 };
 
 const TableList: React.FC = () => {
-  const [showDetail, setShowDetail] = useState<boolean>(false);
-
   const actionRef = useRef<ActionType>();
 
   const [currentRow, setCurrentRow] = useState<CleverFramework.UserListItem>();
-  const [selectedRowsState, setSelectedRows] = useState<CleverFramework.MenuListItem[]>([]);
+  const [selectedRowsState, setSelectedRows] = useState<CleverFramework.UserListItem[]>([]);
 
   const createUserFormRef = createRef<HTMLFormElement>(); // 初始化ref
   const updateUserFormRef = createRef<HTMLFormElement>(); // 初始化ref
+  const authorizeUserFormRef = createRef<HTMLFormElement>(); // 初始化ref
 
   const onFinish = () => {
     setSelectedRows([]);
@@ -77,7 +74,6 @@ const TableList: React.FC = () => {
           <a
             onClick={() => {
               setCurrentRow(entity);
-              setShowDetail(true);
             }}
           >
             {dom}
@@ -93,7 +89,6 @@ const TableList: React.FC = () => {
     {
       title: <FormattedMessage id="pages.system.userTable.userStatus" defaultMessage="用户状态" />,
       dataIndex: 'userStatus',
-      sorter: true,
       hideInForm: true,
       valueEnum: {
         1: {
@@ -133,7 +128,6 @@ const TableList: React.FC = () => {
           defaultMessage="Last scheduled time"
         />
       ),
-      sorter: true,
       dataIndex: 'changePasswordDateTime',
       valueType: 'dateTime',
       renderFormItem: (item, { defaultRender, ...rest }, form) => {
@@ -163,10 +157,20 @@ const TableList: React.FC = () => {
         <a
           key="update"
           onClick={() => {
+            setCurrentRow(record);
             updateUserFormRef.current?.onUpdate(record.id);
           }}
         >
           修改
+        </a>,
+        <a
+          key="authorize"
+          onClick={() => {
+            setCurrentRow(record);
+            authorizeUserFormRef.current?.onAuthorize(record);
+          }}
+        >
+          <a href="#">授权</a>
         </a>,
         <Popconfirm
           key="delete"
@@ -183,15 +187,6 @@ const TableList: React.FC = () => {
         >
           <a href="#">删除</a>
         </Popconfirm>,
-        <a
-          key="config"
-          onClick={() => {
-            // handleUpdateModalVisible(true);
-            setCurrentRow(record);
-          }}
-        >
-          <FormattedMessage id="pages.searchTable.config" defaultMessage="Configuration" />
-        </a>,
       ],
     },
   ];
@@ -270,30 +265,12 @@ const TableList: React.FC = () => {
         onFinish={() => onFinish()}
         onCancel={() => onCancel()}
       />
-
-      <Drawer
-        width={600}
-        visible={showDetail}
-        onClose={() => {
-          setCurrentRow(undefined);
-          setShowDetail(false);
-        }}
-        closable={false}
-      >
-        {currentRow?.username && (
-          <ProDescriptions<CleverFramework.UserListItem>
-            column={2}
-            title={currentRow?.username}
-            request={async () => ({
-              data: currentRow || {},
-            })}
-            params={{
-              id: currentRow?.id,
-            }}
-            columns={columns as ProDescriptionsItemProps<CleverFramework.UserListItem>[]}
-          />
-        )}
-      </Drawer>
+      <UserAuthorizeForm
+        ref={authorizeUserFormRef}
+        user={currentRow}
+        onFinish={() => onFinish()}
+        onCancel={() => onCancel()}
+      />
     </PageContainer>
   );
 };

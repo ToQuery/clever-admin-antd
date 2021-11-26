@@ -1,17 +1,15 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, message, } from 'antd';
-import React, {useState, useRef, createRef} from 'react';
+import { Button, message } from 'antd';
+import React, { useState, useRef, createRef } from 'react';
 import { useIntl, FormattedMessage } from 'umi';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { systemRole, systemRoleDelete } from '@/services/clever-framework/api';
-import type {CleverFramework} from "@/services/clever-framework/typings";
-import RoleCreateForm from "./RoleCreateForm";
-import type {AppBase} from "@/services/typings";
-import RoleUpdateForm from "./RoleUpdateForm";
-
-
+import type { CleverFramework } from '@/services/clever-framework/typings';
+import RoleCreateForm from './RoleCreateForm';
+import type { AppBase } from '@/services/typings';
+import RoleUpdateForm from './RoleUpdateForm';
 
 /**
  *  Delete node
@@ -35,7 +33,6 @@ const handleRemove = async (selectedRows: CleverFramework.RoleListItem[]) => {
 };
 
 const RoleList: React.FC = () => {
-
   const actionRef = useRef<ActionType>();
 
   const [, setCurrentRow] = useState<CleverFramework.RoleListItem>();
@@ -46,15 +43,12 @@ const RoleList: React.FC = () => {
 
   const updateRoleFormRef = createRef<HTMLFormElement>(); // 初始化ref
 
-
   const onFinish = () => {
     setSelectedRows([]);
     actionRef.current?.reloadAndRest?.();
   };
 
-  const onCancel = () => {
-
-  }
+  const onCancel = () => {};
 
   /**
    * @en-US International configuration
@@ -64,12 +58,7 @@ const RoleList: React.FC = () => {
 
   const columns: ProColumns<CleverFramework.RoleListItem>[] = [
     {
-      title: (
-        <FormattedMessage
-          id="pages.system.roleTable.id"
-          defaultMessage="Id"
-        />
-      ),
+      title: <FormattedMessage id="pages.system.roleTable.id" defaultMessage="Id" />,
       hideInSearch: true,
       width: 300,
       dataIndex: 'id',
@@ -124,7 +113,6 @@ const RoleList: React.FC = () => {
             type="primary"
             key="primary"
             onClick={() => {
-              // handleModalVisible(true);
               createRoleFormRef.current?.onShow();
             }}
           >
@@ -172,8 +160,16 @@ const RoleList: React.FC = () => {
           </Button>
         </FooterToolbar>
       )}
-      <RoleCreateForm ref={createRoleFormRef} onFinish={ () => onFinish() } onCancel={ () => onCancel() }/>
-      <RoleUpdateForm ref={updateRoleFormRef} onFinish={ () => onFinish() } onCancel={ () => onCancel() }/>
+      <RoleCreateForm
+        ref={createRoleFormRef}
+        onFinish={() => onFinish()}
+        onCancel={() => onCancel()}
+      />
+      <RoleUpdateForm
+        ref={updateRoleFormRef}
+        onFinish={() => onFinish()}
+        onCancel={() => onCancel()}
+      />
     </PageContainer>
   );
 };

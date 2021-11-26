@@ -1,18 +1,10 @@
 import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 import { message } from 'antd';
-import type { ProFormInstance} from '@ant-design/pro-form';
+import type { ProFormInstance } from '@ant-design/pro-form';
 import { ProFormText, ProFormRadio, ModalForm } from '@ant-design/pro-form';
 import { useIntl } from 'umi';
 import type { CleverFramework } from '@/services/clever-framework/typings';
 import { systemUserAdd } from '@/services/clever-framework/api';
-
-export type FormValueType = {
-  target?: string;
-  template?: string;
-  type?: string;
-  time?: string;
-  frequency?: string;
-} & Partial<CleverFramework.UserListItem>;
 
 export type CreateUserFormProps = {
   onFinish?: any;
@@ -91,8 +83,8 @@ const UserCreateForm: React.ForwardRefRenderFunction<HTMLFormElement, CreateUser
   return (
     <ModalForm<CleverFramework.UserListItem>
       title={intl.formatMessage({
-        id: 'pages.system.menuTable.createForm.newMenu',
-        defaultMessage: '新建菜单',
+        id: 'pages.system.userTable.createForm.newUser',
+        defaultMessage: '新建用户',
       })}
       width="400px"
       visible={createModalVisible}
@@ -110,7 +102,6 @@ const UserCreateForm: React.ForwardRefRenderFunction<HTMLFormElement, CreateUser
           },
         ]}
         label="用户名"
-        width="md"
         name="username"
       />
       <ProFormText
@@ -121,7 +112,6 @@ const UserCreateForm: React.ForwardRefRenderFunction<HTMLFormElement, CreateUser
           },
         ]}
         label="用户昵称"
-        width="md"
         name="nickname"
       />
       <ProFormText
@@ -132,11 +122,10 @@ const UserCreateForm: React.ForwardRefRenderFunction<HTMLFormElement, CreateUser
           },
         ]}
         label="用户密码"
-        width="md"
         name="password"
       />
-      <ProFormText label="手机号" width="md" name="phone" />
-      <ProFormText label="邮箱" width="md" name="email" />
+      <ProFormText label="手机号" name="phone" />
+      <ProFormText label="邮箱" name="email" />
       <ProFormRadio.Group
         name="userStatus"
         label={intl.formatMessage({

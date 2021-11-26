@@ -22,11 +22,8 @@ const handleUpdate = async (fields: CleverFramework.UserListItem) => {
     message.success('修改成功');
     success = true;
   } catch (error) {
-    debugger;
     console.error(error);
-    debugger;
     message.error('修改失败, 请重试!');
-    debugger;
   } finally {
     loadingMessage();
   }
@@ -100,8 +97,8 @@ const UserUpdateForm: React.ForwardRefRenderFunction<HTMLFormElement, UpdateUser
   return (
     <ModalForm<CleverFramework.UserListItem>
       title={intl.formatMessage({
-        id: 'pages.system.menuTable.createForm.newMenu',
-        defaultMessage: '新建菜单',
+        id: 'pages.system.userTable.updateForm.updateMenu',
+        defaultMessage: '修改菜单',
       })}
       width="400px"
       visible={updateModalVisible}
@@ -121,7 +118,6 @@ const UserUpdateForm: React.ForwardRefRenderFunction<HTMLFormElement, UpdateUser
             },
           ]}
           label="用户名"
-          width="md"
           name="username"
         />
         <ProFormText
@@ -132,11 +128,10 @@ const UserUpdateForm: React.ForwardRefRenderFunction<HTMLFormElement, UpdateUser
             },
           ]}
           label="用户昵称"
-          width="md"
           name="nickname"
         />
-        <ProFormText label="手机号" width="md" name="phone" />
-        <ProFormText label="邮箱" width="md" name="email" />
+        <ProFormText label="手机号" name="phone" />
+        <ProFormText label="邮箱" name="email" />
         <ProFormRadio.Group
           name="userStatus"
           label={intl.formatMessage({

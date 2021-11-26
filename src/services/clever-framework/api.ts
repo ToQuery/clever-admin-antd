@@ -65,6 +65,13 @@ export async function systemUserUpdate(systemUserBody: CleverFramework.UserListI
   });
 }
 
+export async function systemUserAuthorize(systemUserBody: CleverFramework.UserListItem) {
+  return request<AppBase.ResponseParam<CleverFramework.UserListItem>>('/api/sys/user', {
+    method: 'PUT',
+    data: systemUserBody,
+  });
+}
+
 //
 export async function systemUserDelete(ids: (string | undefined)[]) {
   return request('/api/sys/user', {
@@ -152,7 +159,6 @@ export async function systemRoleDetail(id: string) {
   });
 }
 
-
 export async function systemRoleDelete(ids: (string | undefined)[]) {
   return request('/api/sys/role', {
     method: 'DELETE',
@@ -168,6 +174,96 @@ export async function systemLog(params?: AppBase.PageParams & CleverFramework.Lo
     method: 'GET',
     params: {
       ...params,
+    },
+  });
+}
+
+//
+export async function systemDict(params?: AppBase.PageParams & CleverFramework.DictListItem) {
+  return request<AppBase.ResponseParam<CleverFramework.DictListItem[]>>('/api/sys/dict', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+  });
+}
+
+export async function systemDictList() {
+  return request<AppBase.ResponseParam<CleverFramework.DictListItem[]>>('/api/sys/dict/list', {
+    method: 'GET',
+  });
+}
+
+export async function systemDictAdd(systemDictBody: CleverFramework.DictListItem) {
+  return request<AppBase.ResponseParam<CleverFramework.DictListItem>>('/api/sys/dict', {
+    method: 'POST',
+    data: systemDictBody,
+  });
+}
+
+export async function systemDictUpdate(systemDictBody: CleverFramework.DictListItem) {
+  return request<AppBase.ResponseParam<CleverFramework.DictListItem>>('/api/sys/dict', {
+    method: 'PUT',
+    data: systemDictBody,
+  });
+}
+
+export async function systemDictDetail(id: string) {
+  return request<AppBase.ResponseParam<CleverFramework.DictListItem>>('/api/sys/dict/' + id, {
+    method: 'GET',
+  });
+}
+
+export async function systemDictDelete(ids: (string | undefined)[]) {
+  return request('/api/sys/dict', {
+    method: 'DELETE',
+    params: {
+      ids: ids,
+    },
+  });
+}
+
+//
+export async function systemConfig(params?: AppBase.PageParams & CleverFramework.ConfigListItem) {
+  return request<AppBase.ResponseParam<CleverFramework.ConfigListItem[]>>('/api/sys/config', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+  });
+}
+
+export async function systemConfigList() {
+  return request<AppBase.ResponseParam<CleverFramework.ConfigListItem[]>>('/api/sys/config/list', {
+    method: 'GET',
+  });
+}
+
+export async function systemConfigAdd(systemDictBody: CleverFramework.ConfigListItem) {
+  return request<AppBase.ResponseParam<CleverFramework.ConfigListItem>>('/api/sys/config', {
+    method: 'POST',
+    data: systemDictBody,
+  });
+}
+
+export async function systemConfigUpdate(systemDictBody: CleverFramework.ConfigListItem) {
+  return request<AppBase.ResponseParam<CleverFramework.ConfigListItem>>('/api/sys/config', {
+    method: 'PUT',
+    data: systemDictBody,
+  });
+}
+
+export async function systemConfigDetail(id: string) {
+  return request<AppBase.ResponseParam<CleverFramework.ConfigListItem>>('/api/sys/config/' + id, {
+    method: 'GET',
+  });
+}
+
+export async function systemConfigDelete(ids: (string | undefined)[]) {
+  return request('/api/sys/config', {
+    method: 'DELETE',
+    params: {
+      ids: ids,
     },
   });
 }

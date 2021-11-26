@@ -149,7 +149,7 @@ const MenuList: React.FC = () => {
         search={{
           labelWidth: 120,
         }}
-        pagination={{}}
+        pagination={false}
         toolBarRender={() => [
           <Button
             type="primary"

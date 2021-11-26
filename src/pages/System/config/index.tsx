@@ -1,15 +1,12 @@
-import { PlusOutlined } from '@ant-design/icons';
 import { Button, message, Popconfirm } from 'antd';
 import React, { useState, useRef, createRef } from 'react';
 import { useIntl, FormattedMessage } from 'umi';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
-import ProTable from '@ant-design/pro-table';
-import { systemDict, systemDictDelete } from '@/services/clever-framework/api';
+import { EditableProTable } from '@ant-design/pro-table';
+import { systemConfig, systemConfigDelete } from '@/services/clever-framework/api';
 import type { CleverFramework } from '@/services/clever-framework/typings';
 import type { AppBase } from '@/services/typings';
-import DictCreateForm from '@/pages/System/dict/DictCreateForm';
-import DictUpdateForm from '@/pages/System/dict/DictUpdateForm';
 
 /**
  *  Delete node
@@ -17,11 +14,11 @@ import DictUpdateForm from '@/pages/System/dict/DictUpdateForm';
  *
  * @param selectedRows
  */
-const handleRemove = async (selectedRows: CleverFramework.DictListItem[]) => {
+const handleRemove = async (selectedRows: CleverFramework.ConfigListItem[]) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
   try {
-    await systemDictDelete(selectedRows.map((row) => row.id));
+    await systemConfigDelete(selectedRows.map((row) => row.id));
     hide();
     message.success('Deleted successfully and will refresh soon');
     return true;
@@ -36,20 +33,20 @@ const TableList: React.FC = () => {
   const [, setShowDetail] = useState<boolean>(false);
 
   const actionRef = useRef<ActionType>();
-  const [, setCurrentRow] = useState<CleverFramework.DictListItem>();
+  const [, setCurrentRow] = useState<CleverFramework.ConfigListItem>();
 
-  const createDictFormRef = createRef<HTMLFormElement>(); // 初始化ref
+  // const createDictFormRef = createRef<HTMLFormElement>(); // 初始化ref
 
   const updateDictFormRef = createRef<HTMLFormElement>(); // 初始化ref
 
-  const [selectedRowsState, setSelectedRows] = useState<CleverFramework.DictListItem[]>([]);
+  const [selectedRowsState, setSelectedRows] = useState<CleverFramework.ConfigListItem[]>([]);
 
-  const onFinish = () => {
-    setSelectedRows([]);
-    actionRef.current?.reloadAndRest?.();
-  };
+  // const onFinish = () => {
+  //   setSelectedRows([]);
+  //   actionRef.current?.reloadAndRest?.();
+  // };
 
-  const onCancel = () => {};
+  // const onCancel = () => {};
 
   /**
    * @en-US International configuration
@@ -57,9 +54,9 @@ const TableList: React.FC = () => {
    * */
   const intl = useIntl();
 
-  const columns: ProColumns<CleverFramework.DictListItem>[] = [
+  const columns: ProColumns<CleverFramework.ConfigListItem>[] = [
     {
-      title: <FormattedMessage id="pages.system.dictTable.id" defaultMessage="Id" />,
+      title: <FormattedMessage id="pages.system.configTable.id" defaultMessage="Id" />,
       hideInSearch: true,
       dataIndex: 'id',
       tip: 'The id is the unique key',
@@ -67,8 +64,10 @@ const TableList: React.FC = () => {
       width: 200,
     },
     {
-      title: <FormattedMessage id="pages.system.dictTable.dictName" defaultMessage="字典名称" />,
-      dataIndex: 'dictName',
+      title: (
+        <FormattedMessage id="pages.system.configTable.configName" defaultMessage="配置名称" />
+      ),
+      dataIndex: 'configName',
       valueType: 'textarea',
       width: 250,
       render: (dom, entity) => {
@@ -85,18 +84,18 @@ const TableList: React.FC = () => {
       },
     },
     {
-      title: <FormattedMessage id="pages.system.dictTable.dictCode" defaultMessage="字段Code" />,
-      dataIndex: 'dictCode',
+      title: <FormattedMessage id="pages.system.configTable.configValue" defaultMessage="配置值" />,
+      dataIndex: 'configValue',
       valueType: 'textarea',
       width: 200,
     },
     {
-      title: <FormattedMessage id="pages.system.dictTable.dictDesc" defaultMessage="描述" />,
-      dataIndex: 'dictDesc',
+      title: <FormattedMessage id="pages.system.configTable.configDesc" defaultMessage="描述" />,
+      dataIndex: 'configDesc',
       valueType: 'textarea',
     },
     {
-      title: <FormattedMessage id="pages.system.dictTable.sortNum" defaultMessage="序号" />,
+      title: <FormattedMessage id="pages.system.configTable.sortNum" defaultMessage="序号" />,
       tip: '序号越大越靠前',
       dataIndex: 'sortNum',
       valueType: 'textarea',
@@ -138,7 +137,10 @@ const TableList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<CleverFramework.DictListItem, AppBase.PageParams & CleverFramework.DictListItem>
+      <EditableProTable<
+        CleverFramework.ConfigListItem,
+        AppBase.PageParams & CleverFramework.ConfigListItem
+      >
         headerTitle={intl.formatMessage({
           id: 'pages.searchTable.title',
           defaultMessage: 'Enquiry form',
@@ -148,21 +150,11 @@ const TableList: React.FC = () => {
         search={{
           labelWidth: 120,
         }}
-        toolBarRender={() => [
-          <Button
-            type="primary"
-            key="primary"
-            onClick={() => {
-              createDictFormRef.current?.onShow();
-            }}
-          >
-            <PlusOutlined /> <FormattedMessage id="pages.searchTable.new" defaultMessage="New" />
-          </Button>,
-        ]}
+        toolBarRender={false}
         request={async (params) => {
           // 这里需要返回一个 Promise,在返回之前你可以进行数据转化
           // 如果需要转化参数可以在这里进行修改
-          const responseParam = await systemDict(params);
+          const responseParam = await systemConfig(params);
           return {
             data: responseParam.content,
             success: responseParam.success,
@@ -200,16 +192,6 @@ const TableList: React.FC = () => {
           </Button>
         </FooterToolbar>
       )}
-      <DictCreateForm
-        ref={createDictFormRef}
-        onFinish={() => onFinish()}
-        onCancel={() => onCancel()}
-      />
-      <DictUpdateForm
-        ref={updateDictFormRef}
-        onFinish={() => onFinish()}
-        onCancel={() => onCancel()}
-      />
     </PageContainer>
   );
 };

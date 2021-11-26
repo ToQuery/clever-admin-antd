@@ -132,13 +132,11 @@ const MenuCreateForm: React.ForwardRefRenderFunction<HTMLFormElement, CreateMenu
             },
           ]}
           label="菜单名称"
-          width="md"
           name="menuName"
         />
         <ProFormText
           rules={[{ required: true, message: '菜单code必填' }]}
           label="菜单Code"
-          width="md"
           name="menuCode"
         />
         <ProForm.Item
@@ -149,7 +147,6 @@ const MenuCreateForm: React.ForwardRefRenderFunction<HTMLFormElement, CreateMenu
         >
           <TreeSelect
             key={'id'}
-            style={{ width: '328px' }}
             placeholder="请选择父级菜单"
             treeDefaultExpandAll={true}
             fieldNames={{ label: 'menuName', value: 'id', children: 'children' }}

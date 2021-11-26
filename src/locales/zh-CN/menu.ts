@@ -7,6 +7,7 @@ export default {
   'menu.system.role': '角色管理',
   'menu.system.user': '用户管理',
   'menu.system.dict': '字典管理',
+  'menu.system.config': '配置管理',
   'menu.system.log': '日志管理',
   'menu.admin': '管理页',
   'menu.admin.sub-page': '二级管理页',

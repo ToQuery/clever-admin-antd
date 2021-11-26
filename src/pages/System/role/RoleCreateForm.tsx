@@ -102,7 +102,7 @@ const RoleCreateForm: React.ForwardRefRenderFunction<HTMLFormElement, CreateRole
   return (
     <ModalForm<CleverFramework.RoleListItem>
       title={intl.formatMessage({
-        id: 'pages.system.menuTable.createForm.newMenu',
+        id: 'pages.system.roleTable.createForm.newRole',
         defaultMessage: '新建角色',
       })}
       width="400px"
@@ -121,8 +121,10 @@ const RoleCreateForm: React.ForwardRefRenderFunction<HTMLFormElement, CreateRole
               message: '角色名称必填',
             },
           ]}
-          label="角色名称"
-          width="md"
+          label={intl.formatMessage({
+            id: 'pages.system.roleTable.roleName',
+            defaultMessage: '角色名称',
+          })}
           name="roleName"
         />
         <ProForm.Item
@@ -132,7 +134,10 @@ const RoleCreateForm: React.ForwardRefRenderFunction<HTMLFormElement, CreateRole
               message: '菜单权限必填',
             },
           ]}
-          label="菜单权限"
+          label={intl.formatMessage({
+            id: 'pages.system.roleTable.configMenu',
+            defaultMessage: '配置菜单',
+          })}
           name="menuIds"
           initialValue={[]}
           valuePropName={'checkedKeys'}

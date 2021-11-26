@@ -117,7 +117,7 @@ const RoleCreateForm: React.ForwardRefRenderFunction<HTMLFormElement, UpdateRole
   return (
     <ModalForm<CleverFramework.RoleListItem>
       title={intl.formatMessage({
-        id: 'pages.system.menuTable.createForm.newMenu',
+        id: 'pages.system.roleTable.updateForm.updateRole',
         defaultMessage: '修改角色',
       })}
       width="400px"
@@ -129,7 +129,7 @@ const RoleCreateForm: React.ForwardRefRenderFunction<HTMLFormElement, UpdateRole
       onFinishFailed={onFinishFailed}
     >
       <Spin spinning={loading}>
-        <ProFormText disabled={true} label="id" width="md" name="id" />
+        <ProFormText disabled={true} label="id" name="id" />
         <ProFormText
           rules={[
             {
@@ -137,8 +137,10 @@ const RoleCreateForm: React.ForwardRefRenderFunction<HTMLFormElement, UpdateRole
               message: '角色名称必填',
             },
           ]}
-          label="角色名称"
-          width="md"
+          label={intl.formatMessage({
+            id: 'pages.system.roleTable.roleName',
+            defaultMessage: '角色名称',
+          })}
           name="roleName"
         />
         <ProForm.Item
@@ -148,7 +150,10 @@ const RoleCreateForm: React.ForwardRefRenderFunction<HTMLFormElement, UpdateRole
               message: '菜单权限必填',
             },
           ]}
-          label="菜单权限"
+          label={intl.formatMessage({
+            id: 'pages.system.roleTable.configMenu',
+            defaultMessage: '配置菜单',
+          })}
           name="menuIds"
           initialValue={[]}
           // TODO 需要获取半选中的节点

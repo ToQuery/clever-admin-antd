@@ -153,7 +153,7 @@ const MenuUpdateForm: React.ForwardRefRenderFunction<HTMLFormElement, UpdateMenu
       onFinishFailed={onFinishFailed}
     >
       <Spin spinning={loading}>
-        <ProFormText disabled={true} label="id" width="md" name="id" />
+        <ProFormText disabled={true} label="id" name="id" />
         <ProFormText
           rules={[
             {
@@ -162,13 +162,11 @@ const MenuUpdateForm: React.ForwardRefRenderFunction<HTMLFormElement, UpdateMenu
             },
           ]}
           label="菜单名称"
-          width="md"
           name="menuName"
         />
         <ProFormText
           rules={[{ required: true, message: '菜单code必填' }]}
           label="菜单Code"
-          width="md"
           name="menuCode"
         />
         <Form.Item
@@ -178,7 +176,6 @@ const MenuUpdateForm: React.ForwardRefRenderFunction<HTMLFormElement, UpdateMenu
         >
           <TreeSelect
             key={'id'}
-            style={{ width: '328px' }}
             placeholder="请选择父级菜单"
             treeDefaultExpandAll={true}
             fieldNames={{ label: 'menuName', value: 'id', children: 'children' }}

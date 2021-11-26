@@ -34,14 +34,20 @@ declare namespace CleverFramework {
   };
 
   type UserListItem = {
-    id?: string;
-    username?: string;
-    nickname?: string;
+    id: string;
+    username: string;
+    nickname: string;
     avatar?: string;
     phone?: string;
     email?: string;
-    enabled?: boolean;
+    enabled: boolean;
     changePasswordDateTime?: string;
+  };
+
+  type UserAuthorize = {
+    id: string;
+    username: string;
+    roleIds: string[];
   };
 
   type MenuListItem = {
@@ -71,5 +77,34 @@ declare namespace CleverFramework {
     targetData?: string;
     sysUser?: UserListItem;
     createDateTime?: string;
+  };
+
+  type DictListItem = {
+    id?: string;
+    dictType: string;
+    dictName: string;
+    dictCode: string;
+    description: string;
+    sortNum: number;
+    dictItems: DictValueListItem[];
+  };
+
+  type DictValueListItem = {
+    id?: string;
+    dictId?: string;
+    itemText?: string;
+    itemValue?: string;
+    description?: string;
+    disable: string;
+    sortNum?: number;
+  };
+
+  type ConfigListItem = {
+    id?: string;
+    configName: string;
+    configValue: string;
+    configDesc: string;
+    disable: number;
+    sortNum: number;
   };
 }

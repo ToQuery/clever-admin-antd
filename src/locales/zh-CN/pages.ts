@@ -87,16 +87,24 @@ export default {
   'pages.system.userTable.phone': '手机号',
   'pages.system.userTable.email': '邮箱',
 
+  'pages.system.userTable.createForm.newUser': '新建用户',
+  'pages.system.userTable.updateForm.updateUser': '修改用户',
+  'pages.system.userTable.updateForm.authorizeUser': '授权用户',
+
   'pages.system.menuTable.id': '菜单id',
   'pages.system.menuTable.menuName': '菜单名称',
   'pages.system.menuTable.menuCode': '菜单Code',
   'pages.system.menuTable.menuLevel': '菜单层级',
   'pages.system.menuTable.sortNum': '菜单序号',
   'pages.system.menuTable.createForm.newMenu': '新建菜单',
+  'pages.system.menuTable.updateForm.updateMenu': '修改菜单',
 
   'pages.system.roleTable.id': '角色id',
   'pages.system.roleTable.roleName': '角色名称',
   'pages.system.roleTable.configMenu': '配置菜单',
+
+  'pages.system.roleTable.createForm.newRole': '新建角色',
+  'pages.system.roleTable.updateForm.updateRole': '修改角色',
 
   'pages.system.logTable.id': '日志id',
   'pages.system.logTable.userId': '用户id',
@@ -110,4 +118,18 @@ export default {
   'pages.system.logTable.logType.delete': '删除',
   'pages.system.logTable.logType.query': '查看',
 
+  'pages.system.dictTable.id': '字典id',
+  'pages.system.dictTable.dictName': '字典名称',
+  'pages.system.dictTable.dictCode': '字段Code',
+  'pages.system.dictTable.description': '描述',
+  'pages.system.dictTable.sortNum': '序号',
+
+  'pages.system.dictTable.createForm.newDict': '新建字典',
+  'pages.system.dictTable.updateForm.updateRole': '修改字典',
+
+  'pages.system.configTable.id': '配置id',
+  'pages.system.configTable.configName': '配置名称',
+  'pages.system.configTable.configValue': '配置值',
+  'pages.system.configTable.configDesc': '配置描述',
+  'pages.system.configTable.sortNum': '序号',
 };
