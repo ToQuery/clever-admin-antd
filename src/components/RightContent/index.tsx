@@ -1,5 +1,5 @@
-import { Space } from 'antd';
-import { QuestionCircleOutlined } from '@ant-design/icons';
+import { Space, Tooltip } from 'antd';
+import { QuestionCircleOutlined, ReloadOutlined } from '@ant-design/icons';
 import React from 'react';
 import { useModel, SelectLang } from 'umi';
 import Avatar from './AvatarDropdown';
@@ -8,7 +8,11 @@ import styles from './index.less';
 
 export type SiderTheme = 'light' | 'dark';
 
-const GlobalHeaderRight: React.FC = () => {
+export interface GlobalHeaderRightProps {
+  switchTabsReloadable?: boolean;
+}
+
+const GlobalHeaderRight: React.FC<GlobalHeaderRightProps> = ({ switchTabsReloadable }) => {
   const { initialState } = useModel('@@initialState');
 
   if (!initialState || !initialState.settings) {
@@ -46,6 +50,20 @@ const GlobalHeaderRight: React.FC = () => {
         //   console.log('input', value);
         // }}
       />
+      {switchTabsReloadable ? (
+        <Tooltip title={'刷新'}>
+          <a
+            style={{
+              color: 'inherit',
+            }}
+            className={styles.action}
+            // @ts-ignore
+            onClick={() => window.tabsAction.reloadTab()}
+          >
+            <ReloadOutlined />
+          </a>
+        </Tooltip>
+      ) : null}
       <span
         className={styles.action}
         onClick={() => {

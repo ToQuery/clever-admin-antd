@@ -1,11 +1,13 @@
-import type { Settings as LayoutSettings } from '@ant-design/pro-layout';
+// import type { Settings as LayoutSettings } from '@ant-design/pro-layout';
 import { PageLoading } from '@ant-design/pro-layout';
 import type { RunTimeLayoutConfig, RequestConfig } from 'umi';
 import { history, Link } from 'umi';
 import RightContent from '@/components/RightContent';
 import Footer from '@/components/Footer';
-
-import { userInfo } from './services/clever-framework/api';
+import SwitchTabsLayout from '@/layouts/SwitchTabsLayout';
+import type { Settings } from '../config/defaultSettings';
+import defaultSettings from '../config/defaultSettings';
+import { userInfo } from '@/services/clever-framework/api';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
 import type { CleverFramework } from '@/services/clever-framework/typings';
 import {
@@ -45,7 +47,7 @@ export const initialStateConfig = {
  * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
  * */
 export async function getInitialState(): Promise<{
-  settings?: Partial<LayoutSettings>;
+  settings?: Partial<Settings>;
   userInfo?: CleverFramework.UserInfo;
   fetchUserInfo?: () => Promise<CleverFramework.UserInfo | undefined>;
 }> {
@@ -64,24 +66,42 @@ export async function getInitialState(): Promise<{
     return {
       fetchUserInfo,
       userInfo: await fetchUserInfo(),
-      settings: {},
+      settings: defaultSettings,
     };
   }
   return {
     fetchUserInfo,
-    settings: {},
+    settings: defaultSettings,
   };
 }
 
 // ProLayout 支持的api https://procomponents.ant.design/components/layout
 export const layout: RunTimeLayoutConfig = ({ initialState }) => {
+  const { switchTabs, ...restSettings } = initialState?.settings || {};
   return {
-    rightContentRender: () => <RightContent />,
+    rightContentRender: () => (
+      <RightContent switchTabsReloadable={switchTabs?.mode && switchTabs.reloadable} />
+    ),
     disableContentMargin: false,
     waterMarkProps: {
       content: initialState?.userInfo?.nickname,
     },
     footerRender: () => <Footer />,
+    className: switchTabs?.mode && 'custom-by-switch-tabs',
+    childrenRender: (children, props) => {
+      const { route } = props;
+      return (
+        <SwitchTabsLayout
+          mode={switchTabs?.mode}
+          persistent={switchTabs?.persistent}
+          fixed={switchTabs?.fixed}
+          routes={route!.routes}
+          footerRender={() => <Footer />}
+        >
+          {children}
+        </SwitchTabsLayout>
+      );
+    },
     onPageChange: () => {
       const { location } = history;
       // 如果没有登录，重定向到 login
@@ -109,6 +129,6 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
     //   if (initialState.loading) return <PageLoading />;
     //   return children;
     // },
-    ...initialState?.settings,
+    ...restSettings,
   };
 };
