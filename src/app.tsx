@@ -79,6 +79,14 @@ export async function getInitialState(): Promise<{
 export const layout: RunTimeLayoutConfig = ({ initialState }) => {
   const { switchTabs, ...restSettings } = initialState?.settings || {};
   return {
+    headerContentRender: () => (
+      <div className="header-content">
+        <Link to="/">
+          <BookOutlined />
+          <span>Clever Framework</span>
+        </Link>
+      </div>
+    ),
     rightContentRender: () => (
       <RightContent switchTabsReloadable={switchTabs?.mode && switchTabs.reloadable} />
     ),
@@ -96,7 +104,6 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
           persistent={switchTabs?.persistent}
           fixed={switchTabs?.fixed}
           routes={route!.routes}
-          footerRender={() => <Footer />}
         >
           {children}
         </SwitchTabsLayout>

@@ -133,7 +133,7 @@ export default function SwitchTabs(props: SwitchTabsProps): JSX.Element {
           closable={item.closable}
           forceRender={_get(persistent, 'force', false)}
         >
-          <main className={styles.content}>{item.content}</main>
+          <main >{item.content}</main>
           {footer}
         </Tabs.TabPane>
       ))}
