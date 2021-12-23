@@ -3,10 +3,10 @@ import { message, Spin, Tree } from 'antd';
 import type { ProFormInstance } from '@ant-design/pro-form';
 import ProForm, { ProFormText, ModalForm } from '@ant-design/pro-form';
 import { useIntl } from 'umi';
-import type { CleverFramework } from '@/services/clever-framework/typings';
-import { systemMenu, systemRoleUpdate, systemRoleDetail } from '@/services/clever-framework/api';
 import { menuTreeData2DataNode } from '@/services/clever-framework/utils';
 import type { DataNode } from 'rc-tree/lib/interface';
+import { CleverFramework } from '@/components/CleverCore/system-typings';
+import { systemMenu, systemRoleDetail, systemRoleUpdate } from '@/components/CleverCore/system-api';
 
 export type UpdateRoleFormProps = {
   onFinish?: any;

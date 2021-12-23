@@ -5,11 +5,12 @@ import { useIntl, FormattedMessage } from 'umi';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { systemDict, systemDictDelete } from '@/services/clever-framework/api';
-import type { CleverFramework } from '@/services/clever-framework/typings';
-import type { AppBase } from '@/services/typings';
 import DictCreateForm from '@/pages/System/dict/DictCreateForm';
 import DictUpdateForm from '@/pages/System/dict/DictUpdateForm';
+import type { ProFormColumnsType } from '@ant-design/pro-form';
+import type { CleverFramework } from '@/components/CleverCore/system-typings';
+import { systemDict, systemDictDelete } from '@/components/CleverCore/system-api';
+import type { AppBase } from '@/components/CleverCore/app-typings';
 
 /**
  *  Delete node
@@ -57,7 +58,8 @@ const TableList: React.FC = () => {
    * */
   const intl = useIntl();
 
-  const columns: ProColumns<CleverFramework.DictListItem>[] = [
+  const columns: ProColumns<CleverFramework.DictListItem>[] &
+    ProFormColumnsType<CleverFramework.DictListItem>[] = [
     {
       title: <FormattedMessage id="pages.system.dictTable.id" defaultMessage="Id" />,
       hideInSearch: true,

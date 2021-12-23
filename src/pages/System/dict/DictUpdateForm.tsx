@@ -3,9 +3,9 @@ import { message, Spin } from 'antd';
 import type { ProFormInstance } from '@ant-design/pro-form';
 import ProForm, { ProFormText, ModalForm } from '@ant-design/pro-form';
 import { useIntl } from 'umi';
-import type { CleverFramework } from '@/services/clever-framework/typings';
-import { systemDictDetail, systemDictUpdate } from '@/services/clever-framework/api';
 import { EditableProTable } from '@ant-design/pro-table';
+import { CleverFramework } from '@/components/CleverCore/system-typings';
+import { systemDictDetail, systemDictUpdate } from '@/components/CleverCore/system-api';
 
 export type UpdateDictFormProps = {
   onFinish?: any;

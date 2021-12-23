@@ -1,17 +1,17 @@
 import { request } from 'umi';
-import type { CleverFramework } from '@/services/clever-framework/typings';
-import type { AppBase } from '@/services/typings';
+import type { CleverFramework } from '@/components/CleverCore/system-typings';
+import type { AppBase } from '@/components/CleverCore/app-typings';
 
 // 获取验证码
 export async function captcha() {
-  return request<AppBase.ResponseParam<CleverFramework.CaptchaResponse>>('/api/captcha', {
+  return request<AppBase.ResponseResult<CleverFramework.CaptchaResponse>>('/api/captcha', {
     method: 'GET',
   });
 }
 
 // 获取当前的用户信息
 export async function userInfo() {
-  return request<AppBase.ResponseParam<CleverFramework.UserInfo>>('/api/user/info', {
+  return request<AppBase.ResponseResult<CleverFramework.UserInfo>>('/api/user/info', {
     method: 'GET',
   });
 }
@@ -25,7 +25,7 @@ export async function logout() {
 
 // 登录
 export async function login(loginRequest: CleverFramework.LoginRequest) {
-  return request<AppBase.ResponseParam<CleverFramework.LoginResponse>>('/api/user/token', {
+  return request<AppBase.ResponseResult<CleverFramework.LoginResponse>>('/api/user/token', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ export async function login(loginRequest: CleverFramework.LoginRequest) {
 
 //
 export async function systemUser(params?: AppBase.PageParams & CleverFramework.UserListItem) {
-  return request<AppBase.ResponseParam<CleverFramework.UserListItem[]>>('/api/sys/user', {
+  return request<AppBase.ResponseResult<CleverFramework.UserListItem[]>>('/api/sys/user', {
     method: 'GET',
     params: {
       ...params,
@@ -45,30 +45,30 @@ export async function systemUser(params?: AppBase.PageParams & CleverFramework.U
 }
 
 export async function systemUserAdd(systemUserBody: CleverFramework.UserListItem) {
-  return request<AppBase.ResponseParam<CleverFramework.UserListItem>>('/api/sys/user', {
+  return request<AppBase.ResponseResult<CleverFramework.UserListItem>>('/api/sys/user', {
     method: 'POST',
     data: systemUserBody,
   });
 }
 
 export async function systemUserDetail(id: string) {
-  return request<AppBase.ResponseParam<CleverFramework.UserListItem>>('/api/sys/user/' + id, {
+  return request<AppBase.ResponseResult<CleverFramework.UserListItem>>('/api/sys/user/' + id, {
     method: 'GET',
   });
 }
 
 //
 export async function systemUserUpdate(systemUserBody: CleverFramework.UserListItem) {
-  return request<AppBase.ResponseParam<CleverFramework.UserListItem>>('/api/sys/user', {
+  return request<AppBase.ResponseResult<CleverFramework.UserListItem>>('/api/sys/user', {
     method: 'PUT',
     data: systemUserBody,
   });
 }
 
-export async function systemUserAuthorize(systemUserBody: CleverFramework.UserListItem) {
-  return request<AppBase.ResponseParam<CleverFramework.UserListItem>>('/api/sys/user', {
+export async function systemUserAuthorize(userAuthorize: CleverFramework.UserAuthorize) {
+  return request<AppBase.ResponseResult<CleverFramework.UserListItem>>('/api/sys/user', {
     method: 'PUT',
-    data: systemUserBody,
+    data: userAuthorize,
   });
 }
 
@@ -84,7 +84,7 @@ export async function systemUserDelete(ids: (string | undefined)[]) {
 
 //
 export async function systemMenu(params?: CleverFramework.MenuListItem) {
-  return request<AppBase.ResponseParam<CleverFramework.MenuListItem[]>>('/api/sys/menu/tree', {
+  return request<AppBase.ResponseResult<CleverFramework.MenuListItem[]>>('/api/sys/menu/tree', {
     method: 'GET',
     params: {
       ...params,
@@ -93,21 +93,21 @@ export async function systemMenu(params?: CleverFramework.MenuListItem) {
 }
 
 export async function systemMenuAdd(systemMenuBody: CleverFramework.MenuListItem) {
-  return request<AppBase.ResponseParam<CleverFramework.MenuListItem>>('/api/sys/menu', {
+  return request<AppBase.ResponseResult<CleverFramework.MenuListItem>>('/api/sys/menu', {
     method: 'POST',
     data: systemMenuBody,
   });
 }
 
 export async function systemMenuDetail(id: string) {
-  return request<AppBase.ResponseParam<CleverFramework.MenuListItem>>('/api/sys/menu/' + id, {
+  return request<AppBase.ResponseResult<CleverFramework.MenuListItem>>('/api/sys/menu/' + id, {
     method: 'GET',
   });
 }
 
 //
 export async function systemMenuUpdate(systemMenuBody: CleverFramework.MenuListItem) {
-  return request<AppBase.ResponseParam<CleverFramework.MenuListItem>>('/api/sys/menu', {
+  return request<AppBase.ResponseResult<CleverFramework.MenuListItem>>('/api/sys/menu', {
     method: 'PUT',
     data: systemMenuBody,
   });
@@ -125,7 +125,7 @@ export async function systemMenuDelete(ids: (string | undefined)[]) {
 
 //
 export async function systemRole(params?: AppBase.PageParams & CleverFramework.RoleListItem) {
-  return request<AppBase.ResponseParam<CleverFramework.RoleListItem[]>>('/api/sys/role', {
+  return request<AppBase.ResponseResult<CleverFramework.RoleListItem[]>>('/api/sys/role', {
     method: 'GET',
     params: {
       ...params,
@@ -134,27 +134,27 @@ export async function systemRole(params?: AppBase.PageParams & CleverFramework.R
 }
 
 export async function systemRoleList() {
-  return request<AppBase.ResponseParam<CleverFramework.RoleListItem[]>>('/api/sys/role/list', {
+  return request<AppBase.ResponseResult<CleverFramework.RoleListItem[]>>('/api/sys/role/list', {
     method: 'GET',
   });
 }
 
 export async function systemRoleAdd(systemRoleBody: CleverFramework.RoleListItem) {
-  return request<AppBase.ResponseParam<CleverFramework.RoleListItem>>('/api/sys/role', {
+  return request<AppBase.ResponseResult<CleverFramework.RoleListItem>>('/api/sys/role', {
     method: 'POST',
     data: systemRoleBody,
   });
 }
 
 export async function systemRoleUpdate(systemRoleBody: CleverFramework.RoleListItem) {
-  return request<AppBase.ResponseParam<CleverFramework.RoleListItem>>('/api/sys/role', {
+  return request<AppBase.ResponseResult<CleverFramework.RoleListItem>>('/api/sys/role', {
     method: 'PUT',
     data: systemRoleBody,
   });
 }
 
 export async function systemRoleDetail(id: string) {
-  return request<AppBase.ResponseParam<CleverFramework.RoleListItem>>('/api/sys/role/' + id, {
+  return request<AppBase.ResponseResult<CleverFramework.RoleListItem>>('/api/sys/role/' + id, {
     method: 'GET',
   });
 }
@@ -169,8 +169,8 @@ export async function systemRoleDelete(ids: (string | undefined)[]) {
 }
 
 //
-export async function systemLog(params?: AppBase.PageParams & CleverFramework.LogListItem) {
-  return request<AppBase.ResponseParam<CleverFramework.LogListItem[]>>('/api/sys/log', {
+export async function systemLog(params?: AppBase.RequestParam & CleverFramework.LogListItem) {
+  return request<AppBase.ResponseResult<CleverFramework.LogListItem[]>>('/api/sys/log', {
     method: 'GET',
     params: {
       ...params,
@@ -179,8 +179,8 @@ export async function systemLog(params?: AppBase.PageParams & CleverFramework.Lo
 }
 
 //
-export async function systemDict(params?: AppBase.PageParams & CleverFramework.DictListItem) {
-  return request<AppBase.ResponseParam<CleverFramework.DictListItem[]>>('/api/sys/dict', {
+export async function systemDict(params?: AppBase.RequestParam & CleverFramework.DictListItem) {
+  return request<AppBase.ResponseResult<CleverFramework.DictListItem[]>>('/api/sys/dict', {
     method: 'GET',
     params: {
       ...params,
@@ -189,27 +189,27 @@ export async function systemDict(params?: AppBase.PageParams & CleverFramework.D
 }
 
 export async function systemDictList() {
-  return request<AppBase.ResponseParam<CleverFramework.DictListItem[]>>('/api/sys/dict/list', {
+  return request<AppBase.ResponseResult<CleverFramework.DictListItem[]>>('/api/sys/dict/list', {
     method: 'GET',
   });
 }
 
 export async function systemDictAdd(systemDictBody: CleverFramework.DictListItem) {
-  return request<AppBase.ResponseParam<CleverFramework.DictListItem>>('/api/sys/dict', {
+  return request<AppBase.ResponseResult<CleverFramework.DictListItem>>('/api/sys/dict', {
     method: 'POST',
     data: systemDictBody,
   });
 }
 
 export async function systemDictUpdate(systemDictBody: CleverFramework.DictListItem) {
-  return request<AppBase.ResponseParam<CleverFramework.DictListItem>>('/api/sys/dict', {
+  return request<AppBase.ResponseResult<CleverFramework.DictListItem>>('/api/sys/dict', {
     method: 'PUT',
     data: systemDictBody,
   });
 }
 
 export async function systemDictDetail(id: string) {
-  return request<AppBase.ResponseParam<CleverFramework.DictListItem>>('/api/sys/dict/' + id, {
+  return request<AppBase.ResponseResult<CleverFramework.DictListItem>>('/api/sys/dict/' + id, {
     method: 'GET',
   });
 }
@@ -224,8 +224,8 @@ export async function systemDictDelete(ids: (string | undefined)[]) {
 }
 
 //
-export async function systemConfig(params?: AppBase.PageParams & CleverFramework.ConfigListItem) {
-  return request<AppBase.ResponseParam<CleverFramework.ConfigListItem[]>>('/api/sys/config', {
+export async function systemConfig(params?: AppBase.RequestParam & CleverFramework.ConfigListItem) {
+  return request<AppBase.ResponseResult<CleverFramework.ConfigListItem[]>>('/api/sys/config', {
     method: 'GET',
     params: {
       ...params,
@@ -234,27 +234,27 @@ export async function systemConfig(params?: AppBase.PageParams & CleverFramework
 }
 
 export async function systemConfigList() {
-  return request<AppBase.ResponseParam<CleverFramework.ConfigListItem[]>>('/api/sys/config/list', {
+  return request<AppBase.ResponseResult<CleverFramework.ConfigListItem[]>>('/api/sys/config/list', {
     method: 'GET',
   });
 }
 
 export async function systemConfigAdd(systemDictBody: CleverFramework.ConfigListItem) {
-  return request<AppBase.ResponseParam<CleverFramework.ConfigListItem>>('/api/sys/config', {
+  return request<AppBase.ResponseResult<CleverFramework.ConfigListItem>>('/api/sys/config', {
     method: 'POST',
     data: systemDictBody,
   });
 }
 
 export async function systemConfigUpdate(systemDictBody: CleverFramework.ConfigListItem) {
-  return request<AppBase.ResponseParam<CleverFramework.ConfigListItem>>('/api/sys/config', {
+  return request<AppBase.ResponseResult<CleverFramework.ConfigListItem>>('/api/sys/config', {
     method: 'PUT',
     data: systemDictBody,
   });
 }
 
 export async function systemConfigDetail(id: string) {
-  return request<AppBase.ResponseParam<CleverFramework.ConfigListItem>>('/api/sys/config/' + id, {
+  return request<AppBase.ResponseResult<CleverFramework.ConfigListItem>>('/api/sys/config/' + id, {
     method: 'GET',
   });
 }

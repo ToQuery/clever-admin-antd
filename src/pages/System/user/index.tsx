@@ -5,12 +5,12 @@ import { useIntl, FormattedMessage } from 'umi';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { systemUser, systemUserDelete } from '@/services/clever-framework/api';
-import type { CleverFramework } from '@/services/clever-framework/typings';
-import type { AppBase } from '@/services/typings';
 import UserCreateForm from '@/pages/System/user/UserCreateForm';
 import UserUpdateForm from '@/pages/System/user/UserUpdateForm';
 import UserAuthorizeForm from '@/pages/System/user/UserAuthorizeForm';
+import type { CleverFramework } from '@/components/CleverCore/system-typings';
+import { systemUser, systemUserDelete } from '@/components/CleverCore/system-api';
+import type { AppBase } from '@/components/CleverCore/app-typings';
 /**
  *  Delete node
  * @zh-CN 删除节点

@@ -4,15 +4,12 @@ import { PageContainer } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 
-import { systemLog } from '@/services/clever-framework/api';
-import type {CleverFramework} from "@/services/clever-framework/typings";
-import type {AppBase} from "@/services/typings";
-
+import type { CleverFramework } from '@/components/CleverCore/system-typings';
+import type { AppBase } from '@/components/CleverCore/app-typings';
+import { systemLog } from '@/components/CleverCore/system-api';
 
 const TableList: React.FC = () => {
-
   const actionRef = useRef<ActionType>();
-
 
   /**
    * @en-US International configuration
@@ -39,9 +36,7 @@ const TableList: React.FC = () => {
       title: <FormattedMessage id="pages.system.userTable.username" defaultMessage="username" />,
       hideInSearch: true,
       valueType: 'textarea',
-      render: (_, record) => [
-        <span>{record.sysUser?.username}</span>,
-      ],
+      render: (_, record) => [<span>{record.sysUser?.username}</span>],
     },
     {
       title: <FormattedMessage id="pages.system.logTable.moduleName" defaultMessage="moduleName" />,
@@ -58,39 +53,37 @@ const TableList: React.FC = () => {
       dataIndex: 'logType',
       hideInForm: true,
       valueEnum: {
-        'CREATE': {
+        CREATE: {
           text: (
             <FormattedMessage id="pages.system.logTable.logType.create" defaultMessage="创建" />
           ),
           status: 'CREATE',
         },
-        'MODIFY': {
+        MODIFY: {
           text: (
             <FormattedMessage id="pages.system.logTable.logType.modify" defaultMessage="修改" />
           ),
           status: 'MODIFY',
         },
-        'DELETE': {
+        DELETE: {
           text: (
             <FormattedMessage id="pages.system.logTable.logType.delete" defaultMessage="删除" />
           ),
           status: 'DELETE',
         },
-        'QUERY': {
-          text: (
-            <FormattedMessage id="pages.system.logTable.logType.query" defaultMessage="查看" />
-          ),
+        QUERY: {
+          text: <FormattedMessage id="pages.system.logTable.logType.query" defaultMessage="查看" />,
           status: 'QUERY',
         },
       },
     },
     {
-      title: <FormattedMessage id="pages.commonTable.createDateTime" defaultMessage="createDateTime" />,
+      title: (
+        <FormattedMessage id="pages.commonTable.createDateTime" defaultMessage="createDateTime" />
+      ),
       dataIndex: 'createDateTime',
       valueType: 'dateTimeRange',
-      render: (_, record) => [
-        <span>{record?.createDateTime}</span>,
-      ],
+      render: (_, record) => [<span>{record?.createDateTime}</span>],
     },
     {
       title: <FormattedMessage id="pages.system.logTable.rawData" defaultMessage="rawData" />,
@@ -110,7 +103,7 @@ const TableList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<CleverFramework.LogListItem, AppBase.PageParams & CleverFramework.LogListItem>
+      <ProTable<CleverFramework.LogListItem, AppBase.RequestParam & CleverFramework.LogListItem>
         headerTitle={intl.formatMessage({
           id: 'pages.searchTable.title',
           defaultMessage: 'Enquiry form',
@@ -120,12 +113,11 @@ const TableList: React.FC = () => {
         search={{
           labelWidth: 120,
         }}
-        toolBarRender={() => [
-        ]}
+        toolBarRender={() => []}
         request={async (
           // 第一个参数 params 查询表单和 params 参数的结合
           // 第一个参数中一定会有 pageSize 和  current ，这两个参数是 antd 的规范
-          params
+          params,
         ) => {
           // 这里需要返回一个 Promise,在返回之前你可以进行数据转化
           // 如果需要转化参数可以在这里进行修改

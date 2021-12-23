@@ -7,9 +7,9 @@ import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import MenuCreateForm from './MenuCreateForm';
 import MenuUpdateForm from './MenuUpdateForm';
-import { systemMenu, systemMenuDelete } from '@/services/clever-framework/api';
-import type { CleverFramework } from '@/services/clever-framework/typings';
-import type { AppBase } from '@/services/typings';
+import type { CleverFramework } from '@/components/CleverCore/system-typings';
+import { systemMenu, systemMenuDelete } from '@/components/CleverCore/system-api';
+import type { AppBase } from '@/components/CleverCore/app-typings';
 
 /**
  *  Delete node
@@ -139,7 +139,7 @@ const MenuList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<CleverFramework.MenuListItem, AppBase.PageParams & CleverFramework.MenuListItem>
+      <ProTable<CleverFramework.MenuListItem, AppBase.RequestParam & CleverFramework.MenuListItem>
         headerTitle={intl.formatMessage({
           id: 'pages.searchTable.title',
           defaultMessage: 'Enquiry form',

@@ -4,9 +4,9 @@ import { useIntl, FormattedMessage } from 'umi';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import { EditableProTable } from '@ant-design/pro-table';
-import { systemConfig, systemConfigDelete } from '@/services/clever-framework/api';
-import type { CleverFramework } from '@/services/clever-framework/typings';
-import type { AppBase } from '@/services/typings';
+import type { CleverFramework } from '@/components/CleverCore/system-typings';
+import { systemConfig, systemConfigDelete } from '@/components/CleverCore/system-api';
+import type { AppBase } from '@/components/CleverCore/app-typings';
 
 /**
  *  Delete node

@@ -5,11 +5,11 @@ import { useIntl, FormattedMessage } from 'umi';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { systemRole, systemRoleDelete } from '@/services/clever-framework/api';
-import type { CleverFramework } from '@/services/clever-framework/typings';
 import RoleCreateForm from './RoleCreateForm';
-import type { AppBase } from '@/services/typings';
 import RoleUpdateForm from './RoleUpdateForm';
+import type { CleverFramework } from '@/components/CleverCore/system-typings';
+import { systemRole, systemRoleDelete } from '@/components/CleverCore/system-api';
+import type { AppBase } from '@/components/CleverCore/app-typings';
 
 /**
  *  Delete node

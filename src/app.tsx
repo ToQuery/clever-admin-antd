@@ -5,9 +5,7 @@ import { history, Link } from 'umi';
 import RightContent from '@/components/RightContent';
 import Footer from '@/components/Footer';
 
-import { userInfo } from './services/clever-framework/api';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
-import type { CleverFramework } from '@/services/clever-framework/typings';
 import {
   demo1Middleware,
   demo2Middleware,
@@ -15,6 +13,8 @@ import {
   requestInterceptors,
   responseInterceptors,
 } from '@/utils/request';
+import { userInfo } from '@/components/CleverCore/system-api';
+import { CleverFramework } from '@/components/CleverCore/system-typings';
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';

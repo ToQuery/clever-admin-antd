@@ -3,9 +3,9 @@ import { message, Spin } from 'antd';
 import type { ProFormInstance } from '@ant-design/pro-form';
 import ProForm, { ProFormText, ModalForm } from '@ant-design/pro-form';
 import { useIntl } from 'umi';
-import type { CleverFramework } from '@/services/clever-framework/typings';
-import { systemUserDetail, systemUserUpdate } from '@/services/clever-framework/api';
 import { EditableProTable } from '@ant-design/pro-table';
+import { systemUserAuthorize, systemUserDetail } from '@/components/CleverCore/system-api';
+import type { CleverFramework } from '@/components/CleverCore/system-typings';
 
 export type AuthorizeUserFormProps = {
   user?: CleverFramework.UserListItem;
@@ -20,7 +20,7 @@ const handleAuthorize = async (fields: CleverFramework.UserAuthorize) => {
   const loadingMessage = message.loading('正在修改');
   let success: boolean = false;
   try {
-    await systemUserUpdate({ ...fields });
+    await systemUserAuthorize({ ...fields });
     message.success('授权成功');
     success = true;
   } catch (error) {
@@ -93,7 +93,7 @@ const UserAuthorizeForm: React.ForwardRefRenderFunction<HTMLFormElement, Authori
     // 这里return 的对象里面方法和属性可以被父组件调用
     return {
       onAuthorize(user: CleverFramework.UserListItem) {
-        authorize(user);
+        authorize(user.id);
       },
     };
   });

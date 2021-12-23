@@ -13,9 +13,9 @@ import { useIntl, history, FormattedMessage, SelectLang, useModel } from 'umi';
 import Footer from '@/components/Footer';
 
 import styles from './index.less';
-import type { CleverFramework } from '@/services/clever-framework/typings';
-import { login } from '@/services/clever-framework/api';
 import { setToken } from '@/utils/cookie';
+import type { CleverFramework } from '@/components/CleverCore/system-typings';
+import { login } from '@/components/CleverCore/system-api';
 
 const Login: React.FC = () => {
   const [type, setType] = useState<string>('account');
