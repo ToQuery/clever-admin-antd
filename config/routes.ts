@@ -78,6 +78,22 @@
     ],
   },
   {
+    path: '/biz',
+    name: 'biz',
+    icon: 'control',
+    code: 'system',
+    routes: [
+      {
+        path: '/biz/news',
+        name: 'news',
+        icon: 'smile',
+        code: 'system:news',
+        // access: 'cleverAccess',
+        component: './news/info/index.tsx',
+      },
+    ]
+  },
+  {
     path: '/admin',
     name: 'admin',
     icon: 'crown',
