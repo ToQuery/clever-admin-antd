@@ -7,7 +7,7 @@ import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
 import type { MenuInfo } from 'rc-menu/lib/interface';
 import { setToken } from '@/utils/cookie';
-import { logout } from '@/components/CleverCore/system-api';
+import { logout } from '@/components/CleverFramework/system-api';
 
 export type GlobalHeaderRightProps = {
   menu?: boolean;

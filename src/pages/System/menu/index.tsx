@@ -7,9 +7,9 @@ import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import MenuCreateForm from './MenuCreateForm';
 import MenuUpdateForm from './MenuUpdateForm';
-import type { CleverFramework } from '@/components/CleverCore/system-typings';
-import { systemMenu, systemMenuDelete } from '@/components/CleverCore/system-api';
-import type { AppBase } from '@/components/CleverCore/app-typings';
+import type { CleverFramework } from '@/components/CleverFramework/system-typings';
+import { systemMenu, systemMenuDelete } from '@/components/CleverFramework/system-api';
+import type { AppBase } from '@/components/CleverFramework/app-typings';
 
 /**
  *  Delete node

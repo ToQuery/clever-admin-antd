@@ -13,8 +13,8 @@ import {
   requestInterceptors,
   responseInterceptors,
 } from '@/utils/request';
-import { userInfo } from '@/components/CleverCore/system-api';
-import { CleverFramework } from '@/components/CleverCore/system-typings';
+import { userInfo } from '@/components/CleverFramework/system-api';
+import { CleverFramework } from '@/components/CleverFramework/system-typings';
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';

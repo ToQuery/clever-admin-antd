@@ -14,8 +14,8 @@ import Footer from '@/components/Footer';
 
 import styles from './index.less';
 import { setToken } from '@/utils/cookie';
-import type { CleverFramework } from '@/components/CleverCore/system-typings';
-import { login } from '@/components/CleverCore/system-api';
+import type { CleverFramework } from '@/components/CleverFramework/system-typings';
+import { login } from '@/components/CleverFramework/system-api';
 
 const Login: React.FC = () => {
   const [type, setType] = useState<string>('account');

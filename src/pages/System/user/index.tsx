@@ -8,9 +8,9 @@ import ProTable from '@ant-design/pro-table';
 import UserCreateForm from '@/pages/System/user/UserCreateForm';
 import UserUpdateForm from '@/pages/System/user/UserUpdateForm';
 import UserAuthorizeForm from '@/pages/System/user/UserAuthorizeForm';
-import type { CleverFramework } from '@/components/CleverCore/system-typings';
-import { systemUser, systemUserDelete } from '@/components/CleverCore/system-api';
-import type { AppBase } from '@/components/CleverCore/app-typings';
+import type { CleverFramework } from '@/components/CleverFramework/system-typings';
+import { systemUser, systemUserDelete } from '@/components/CleverFramework/system-api';
+import type { AppBase } from '@/components/CleverFramework/app-typings';
 /**
  *  Delete node
  * @zh-CN 删除节点

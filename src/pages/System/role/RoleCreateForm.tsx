@@ -5,8 +5,8 @@ import ProForm, { ProFormText, ModalForm } from '@ant-design/pro-form';
 import { useIntl } from 'umi';
 import { menuTreeData2DataNode } from '@/services/clever-framework/utils';
 import { DataNode } from 'rc-tree/lib/interface';
-import { systemMenu, systemRoleAdd } from '@/components/CleverCore/system-api';
-import { CleverFramework } from '@/components/CleverCore/system-typings';
+import { systemMenu, systemRoleAdd } from '@/components/CleverFramework/system-api';
+import { CleverFramework } from '@/components/CleverFramework/system-typings';
 // import {DataNode} from "rc-tree/lib/interface";
 
 export type CreateRoleFormProps = {

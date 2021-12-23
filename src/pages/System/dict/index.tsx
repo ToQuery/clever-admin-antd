@@ -8,9 +8,9 @@ import ProTable from '@ant-design/pro-table';
 import DictCreateForm from '@/pages/System/dict/DictCreateForm';
 import DictUpdateForm from '@/pages/System/dict/DictUpdateForm';
 import type { ProFormColumnsType } from '@ant-design/pro-form';
-import type { CleverFramework } from '@/components/CleverCore/system-typings';
-import { systemDict, systemDictDelete } from '@/components/CleverCore/system-api';
-import type { AppBase } from '@/components/CleverCore/app-typings';
+import type { CleverFramework } from '@/components/CleverFramework/system-typings';
+import { systemDict, systemDictDelete } from '@/components/CleverFramework/system-api';
+import type { AppBase } from '@/components/CleverFramework/app-typings';
 
 /**
  *  Delete node

@@ -1,5 +1,5 @@
 import type { DataNode } from 'antd/lib/tree';
-import { CleverFramework } from '@/components/CleverCore/system-typings';
+import { CleverFramework } from '@/components/CleverFramework/system-typings';
 
 export const menuTreeData2DataNode = (treeData: CleverFramework.MenuListItem[]): DataNode[] => {
   const dataNodes: DataNode[] = [];

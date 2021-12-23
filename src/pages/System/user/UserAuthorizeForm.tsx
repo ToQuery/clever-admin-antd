@@ -4,8 +4,8 @@ import type { ProFormInstance } from '@ant-design/pro-form';
 import ProForm, { ProFormText, ModalForm } from '@ant-design/pro-form';
 import { useIntl } from 'umi';
 import { EditableProTable } from '@ant-design/pro-table';
-import { systemUserAuthorize, systemUserDetail } from '@/components/CleverCore/system-api';
-import type { CleverFramework } from '@/components/CleverCore/system-typings';
+import { systemUserAuthorize, systemUserDetail } from '@/components/CleverFramework/system-api';
+import type { CleverFramework } from '@/components/CleverFramework/system-typings';
 
 export type AuthorizeUserFormProps = {
   user?: CleverFramework.UserListItem;

@@ -4,9 +4,9 @@ import { PageContainer } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 
-import type { CleverFramework } from '@/components/CleverCore/system-typings';
-import type { AppBase } from '@/components/CleverCore/app-typings';
-import { systemLog } from '@/components/CleverCore/system-api';
+import type { CleverFramework } from '@/components/CleverFramework/system-typings';
+import type { AppBase } from '@/components/CleverFramework/app-typings';
+import { systemLog } from '@/components/CleverFramework/system-api';
 
 const TableList: React.FC = () => {
   const actionRef = useRef<ActionType>();

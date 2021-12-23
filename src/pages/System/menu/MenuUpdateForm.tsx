@@ -3,8 +3,8 @@ import { Form, message, Spin, TreeSelect } from 'antd';
 import type { ProFormInstance } from '@ant-design/pro-form';
 import { ModalForm, ProFormText } from '@ant-design/pro-form';
 import { useIntl } from 'umi';
-import { CleverFramework } from '@/components/CleverCore/system-typings';
-import { systemMenu, systemMenuDetail, systemMenuUpdate } from '@/components/CleverCore/system-api';
+import { CleverFramework } from '@/components/CleverFramework/system-typings';
+import { systemMenu, systemMenuDetail, systemMenuUpdate } from '@/components/CleverFramework/system-api';
 
 export type UpdateMenuFormProps = {
   onFinish?: any;

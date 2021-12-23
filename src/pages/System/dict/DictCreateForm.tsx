@@ -4,8 +4,8 @@ import type { ProFormInstance } from '@ant-design/pro-form';
 import ProForm, { ProFormText, ModalForm } from '@ant-design/pro-form';
 import { useIntl } from 'umi';
 import { EditableProTable } from '@ant-design/pro-table';
-import type { CleverFramework } from '@/components/CleverCore/system-typings';
-import { systemDictAdd } from '@/components/CleverCore/system-api';
+import type { CleverFramework } from '@/components/CleverFramework/system-typings';
+import { systemDictAdd } from '@/components/CleverFramework/system-api';
 
 export type CreateDictFormProps = {
   onFinish?: any;

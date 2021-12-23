@@ -7,9 +7,9 @@ import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import RoleCreateForm from './RoleCreateForm';
 import RoleUpdateForm from './RoleUpdateForm';
-import type { CleverFramework } from '@/components/CleverCore/system-typings';
-import { systemRole, systemRoleDelete } from '@/components/CleverCore/system-api';
-import type { AppBase } from '@/components/CleverCore/app-typings';
+import type { CleverFramework } from '@/components/CleverFramework/system-typings';
+import { systemRole, systemRoleDelete } from '@/components/CleverFramework/system-api';
+import type { AppBase } from '@/components/CleverFramework/app-typings';
 
 /**
  *  Delete node

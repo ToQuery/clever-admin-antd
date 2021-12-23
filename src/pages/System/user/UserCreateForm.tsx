@@ -3,8 +3,8 @@ import { message } from 'antd';
 import type { ProFormInstance } from '@ant-design/pro-form';
 import { ProFormText, ProFormRadio, ModalForm } from '@ant-design/pro-form';
 import { useIntl } from 'umi';
-import type { CleverFramework } from '@/components/CleverCore/system-typings';
-import { systemUserAdd } from '@/components/CleverCore/system-api';
+import type { CleverFramework } from '@/components/CleverFramework/system-typings';
+import { systemUserAdd } from '@/components/CleverFramework/system-api';
 
 export type CreateUserFormProps = {
   onFinish?: any;

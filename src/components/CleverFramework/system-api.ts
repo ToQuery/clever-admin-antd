@@ -1,6 +1,6 @@
 import { request } from 'umi';
-import type { CleverFramework } from '@/components/CleverCore/system-typings';
-import type { AppBase } from '@/components/CleverCore/app-typings';
+import type { CleverFramework } from '@/components/CleverFramework/system-typings';
+import type { AppBase } from '@/components/CleverFramework/app-typings';
 
 // 获取验证码
 export async function captcha() {
